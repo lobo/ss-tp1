@@ -2,7 +2,7 @@
 	package ar.edu.itba.ss;
 
 		/**
-		* <p>Puto de entrada principal de la simulación.</p>
+		* <p>Punto de entrada principal de la simulación.</p>
 		*/
 
 	public final class Main {
