@@ -4,11 +4,11 @@
 
 ...
 
-## Deployment
+## Deployment instructions
 
 ...
 
-## Designers
+## Developers
 
 El proyecto fue construido, es diseñado y mantenido por:
 
