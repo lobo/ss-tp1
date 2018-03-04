@@ -21,6 +21,9 @@
 							"El espacio proporcionado no puede ser un espacio nulo.");
 				final double length = space.dimensions().get(0);
 				final double density = n / (length * length);
+
+				// Cómo se calcula?
+
 				return 1; // Brute-force...
 			}
 		};

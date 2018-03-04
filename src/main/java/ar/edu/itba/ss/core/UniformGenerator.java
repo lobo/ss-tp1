@@ -41,4 +41,9 @@
 						Math.random() * maxRadius);
 			}).limit(size);
 		}
+
+		@Override
+		public int size() {
+			return size;
+		}
 	}

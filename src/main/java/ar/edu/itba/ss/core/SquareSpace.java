@@ -7,23 +7,51 @@
 	import ar.edu.itba.ss.core.interfaces.Space;
 
 		/**
-		* <p>Modela un espacio bidimensional cuadrado y finito.</p>
+		* <p>Modela un espacio bidimensional cuadrado y finito, con o sin
+		* condiciones de contorno periódicas.</p>
 		*/
 
-	public final class SquareSpace implements Space {
+	public class SquareSpace implements Space {
 
-		private final List<Double> dimensions;
+		protected final List<Double> dimensions;
+		protected final boolean periodic;
 
-		private SquareSpace(final double length) {
-			this.dimensions = Arrays.asList(length, length);
+		public SquareSpace(final Builder builder) {
+			this.dimensions = builder.dimensions;
+			this.periodic = builder.periodic;
 		}
 
-		public static Space of(final double length) {
-			return new SquareSpace(length);
+		public static Builder of(final double length) {
+			return new Builder(Arrays.asList(length, length));
 		}
 
 		@Override
 		public List<Double> dimensions() {
 			return dimensions;
+		}
+
+		@Override
+		public boolean hasPeriodicBoundary() {
+			return periodic;
+		}
+
+		public static final class Builder {
+
+			private final List<Double> dimensions;
+			private boolean periodic;
+
+			public Builder(final List<Double> dimensions) {
+				this.dimensions = dimensions;
+				this.periodic = false;
+			}
+
+			public Builder periodicBoundary(final boolean periodic) {
+				this.periodic = periodic;
+				return this;
+			}
+
+			public SquareSpace build() {
+				return new SquareSpace(this);
+			}
 		}
 	}
