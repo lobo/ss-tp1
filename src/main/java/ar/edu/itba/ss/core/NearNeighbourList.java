@@ -45,6 +45,9 @@ public final class NearNeighbourList {
 		}
 
 		public Builder over(final Space space) {
+			if (space.dimensions().size() < 2)
+				throw new IllegalArgumentException(
+					"El espacio debe poseer una dimensión superior a 2.");
 			this.space = space;
 			return this;
 		}
