@@ -2,8 +2,6 @@
 
 # System Simulation: Cell Index Method
 
-Input:
-
 The program receives the following parameters:
 
 1. The positions (x,y) coordinates of the N particles that the system has.
@@ -31,7 +29,7 @@ The program outputs the following:
 $ mvn package
 ```
 
-This will generate a jar in the `target` folder`.
+This will generate a jar in the `target` folder.
 
 3. To run, execute the following command:
 
@@ -46,7 +44,7 @@ Where:
 * [M] 
 * [rc] is the radius
 * The fifth parameter can be 1 or 0: 1 to include walls, 0 to exclude them.
-```
+
 
 ## Developers
 
