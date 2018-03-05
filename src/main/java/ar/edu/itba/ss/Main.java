@@ -1,44 +1,61 @@
-/**
-* <p>Punto de entrada principal de la simulación.</p>
-*/
+package ar.edu.itba.ss;
+
+import java.util.List;
+import java.util.Map;
+
+import ar.edu.itba.ss.core.BruteForce;
+//import ar.edu.itba.ss.core.CellIndexMethod;
+import ar.edu.itba.ss.core.NearNeighbourList;
+//import ar.edu.itba.ss.core.OptimalGrid;
+import ar.edu.itba.ss.core.Particle;
+import ar.edu.itba.ss.core.SquareSpace;
+import ar.edu.itba.ss.core.UniformGenerator;
+
+	/**
+	* <p>Punto de entrada principal de la simulación.</p>
+	*/
 
 public final class Main {
-		
-	public static void generateOvitoInput(int N, double L, double R) {
-		System.out.println(N);
-		System.out.println("Uniform random particles");
-		for (int i = 0; i < N; i++) {
-			System.out
-					.println((i + 1) + "\t" + Math.random() * L + "\t" + Math.random() * L + "\t" 
-					+ Math.random() * R);
-		}
-	}
 
 	public static void main(final String [] arguments) {
-		String runningOption = arguments[0];
-		
-		if (runningOption.equals("generate")) {
-			try {
-				
-				int N = Integer.valueOf(arguments[1]);
-				double L = Double.valueOf(arguments[2]);
-				double R = Double.valueOf(arguments[3]);
-				
-				generateOvitoInput(N, L, R);
-				
-			} catch(Exception e) {
-				System.err.println("Wrong parameters");
-			}
-		} else if (runningOption.equals("find")) {
-			try {
-				
-			} catch(Exception e) {
-				System.err.println("Wrong parameters");
-			}
-		} else {
-			System.err.println("Must provide a valid instruction: 'generate' or 'find'");
-		}
 
 		System.out.println("(2018) Cell Index Method.");
+
+		// Agregar un método intermedio de serialización (útil para generaciones random!)
+		// Necesitamos un detector de cercanía!!! No debería ser interno?
+		// Hay que tener en cuenta partículas superpuestas?
+		//		si están superpuestas, la distancia es negativa.
+
+		final Map<Particle, List<Particle>> nnl = NearNeighbourList
+				.from(new UniformGenerator(5, 1.0, 0.2))            // Genera 5 partículas...
+				.with(new BruteForce()/*CellIndexMethod
+						.by(OptimalGrid.DENSITY_BASED)
+						.build()*/)
+				.over(SquareSpace.of(1.0)
+						.periodicBoundary(true)
+						.build())
+				.interactionRadius(0.1)
+				.cluster();
+
+		nnl.forEach((particle, neighbours) -> {
+
+			System.out.println(
+					particle.hashCode() + ":(" +
+					particle.getX() + ", " +
+					particle.getY() + ", r:" +
+					particle.getRadius() + ") -> [" +
+					list(neighbours) + "]");
+		});
+	}
+
+	private static String list(final List<Particle> neighbours) {
+		String list = "";
+		for (final Particle particle : neighbours) {
+			list += particle.hashCode() + ", ";
+		}
+		if (!neighbours.isEmpty()) {
+			return list.substring(0, list.length() - 2);
+		}
+		else return list;
 	}
 }
