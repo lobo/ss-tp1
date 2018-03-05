@@ -43,7 +43,7 @@ Where:
 * [L] is the length of the side of the square
 * [M] 
 * [rc] is the radius
-* The fifth parameter can be 1 or 0: 1 to include walls, 0 to exclude them.
+* The fifth parameter can be 1 or 0: 1 to include particle walls, 0 to exclude them.
 
 
 ## Input files format
@@ -62,7 +62,7 @@ rn prN
 
 ### Dynamic
 
-Note: the first line represents the time. There's only one time given that the detection of the neighbors occurs at a given instant of the system. Like a snapshot.
+Note: the first line represents the time. Given the fact that the detection of the neighbors occurs at a given instant of the system, there's only one time in this file. Like a snapshot.
 
 ```
 t0
@@ -73,10 +73,11 @@ x3 y3
 xN yN
 ```
 
-## Output file
+## Output file format
 
+```
 [id-of-particle-i id's of the particles which border-border distance is less than rc]
-
+```
 
 
 ## Developers
