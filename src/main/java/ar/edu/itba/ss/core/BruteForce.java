@@ -1,8 +1,12 @@
 
 	package ar.edu.itba.ss.core;
 
-	import java.util.HashMap;
 	import java.util.List;
+	import java.util.Map;
+
+	import static java.util.function.Function.identity;
+	import static java.util.stream.Collectors.toList;
+	import static java.util.stream.Collectors.toMap;
 
 	import ar.edu.itba.ss.core.interfaces.DistanceProcessor;
 	import ar.edu.itba.ss.core.interfaces.ParticleGenerator;
@@ -18,13 +22,22 @@
 	public class BruteForce implements DistanceProcessor {
 
 		@Override
-		public HashMap<Particle, List<Particle>> compute(
+		public Map<Particle, List<Particle>> compute(
 				final ParticleGenerator generator,
 				final Space space,
 				final double interactionRadius) {
 
-			// Calcular distancias...
+			final List<Particle> particles = generator
+					.generate()
+					.collect(toList());
 
-			return new HashMap<Particle, List<Particle>>();
+			return particles.stream()
+					.collect(toMap(
+							identity(),
+							particle1 -> particles.stream()
+								.filter(particle2 -> particle1 != particle2)
+								.filter(particle2 -> particle1.distance(particle2) <= interactionRadius)
+								.collect(toList())
+							));
 		}
 	}

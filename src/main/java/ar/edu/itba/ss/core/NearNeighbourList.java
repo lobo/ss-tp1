@@ -1,8 +1,8 @@
 
 	package ar.edu.itba.ss.core;
 
-	import java.util.HashMap;
 	import java.util.List;
+	import java.util.Map;
 
 	import ar.edu.itba.ss.core.interfaces.DistanceProcessor;
 	import ar.edu.itba.ss.core.interfaces.ParticleGenerator;
@@ -55,7 +55,7 @@
 				return this;
 			}
 
-			public HashMap<Particle, List<Particle>> cluster() {
+			public Map<Particle, List<Particle>> cluster() {
 				return processor.compute(generator, space, interactionRadius);
 			}
 		}

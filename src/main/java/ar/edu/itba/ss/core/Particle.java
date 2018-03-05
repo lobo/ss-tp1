@@ -29,4 +29,10 @@
 		public double getRadius() {
 			return radius;
 		}
+
+		public double distance(final Particle particle) {
+			return Math.hypot(x - particle.x, y - particle.y)
+					- radius
+					- particle.radius;
+		}
 	}

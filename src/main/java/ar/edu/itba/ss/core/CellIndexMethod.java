@@ -3,6 +3,7 @@
 
 	import java.util.HashMap;
 	import java.util.List;
+	import java.util.Map;
 	import java.util.function.BiFunction;
 
 	import ar.edu.itba.ss.core.interfaces.DistanceProcessor;
@@ -26,7 +27,7 @@
 		}
 
 		@Override
-		public HashMap<Particle, List<Particle>> compute(
+		public Map<Particle, List<Particle>> compute(
 				final ParticleGenerator generator,
 				final Space space,
 				final double interactionRadius) {

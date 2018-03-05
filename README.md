@@ -1,4 +1,4 @@
-![...](res/image/readme-header.png)
+![...](resources/image/readme-header.png)
 
 # System Simulation: Cell Index Method
 

@@ -1,8 +1,8 @@
 
 	package ar.edu.itba.ss.core.interfaces;
 
-	import java.util.HashMap;
 	import java.util.List;
+	import java.util.Map;
 
 	import ar.edu.itba.ss.core.Particle;
 
@@ -16,7 +16,7 @@
 
 	public interface DistanceProcessor {
 
-		public HashMap<Particle, List<Particle>> compute(
+		public Map<Particle, List<Particle>> compute(
 				final ParticleGenerator generator,
 				final Space space,
 				final double interactionRadius);
