@@ -3,6 +3,7 @@
 
 	import java.util.List;
 	import java.util.Map;
+	import java.util.function.Function;
 
 	import static java.util.function.Function.identity;
 	import static java.util.stream.Collectors.toList;
@@ -34,10 +35,13 @@
 			return particles.stream()
 					.collect(toMap(
 							identity(),
-							particle1 -> particles.stream()
-								.filter(particle2 -> particle1 != particle2)
-								.filter(particle2 -> particle1.distance(particle2) <= interactionRadius)
-								.collect(toList())
-							));
+							p1 -> {
+								final Function<Particle, Double> distance = Particle
+										.distanceFactory(p1, space);
+								return particles.stream()
+									.filter(p2 -> p1 != p2)
+									.filter(p2 -> distance.apply(p2) <= interactionRadius)
+									.collect(toList());
+							}));
 		}
 	}
