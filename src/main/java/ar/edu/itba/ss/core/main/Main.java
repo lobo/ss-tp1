@@ -1,4 +1,4 @@
-package ar.edu.itba.ss;
+package ar.edu.itba.ss.core.main;
 
 import java.util.List;
 import java.util.Map;
