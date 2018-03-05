@@ -46,6 +46,39 @@ Where:
 * The fifth parameter can be 1 or 0: 1 to include walls, 0 to exclude them.
 
 
+## Input files format
+
+### Static
+
+```
+N
+L
+r1 pr1
+r2 pr2
+r3 pr3
+...
+rn prN
+```
+
+### Dynamic
+
+Note: the first line represents the time. There's only one time given that the detection of the neighbors occurs at a given instant of the system. Like a snapshot.
+
+```
+t0
+x1 y1
+x2 y2
+x3 y3
+...
+xN yN
+```
+
+## Output file
+
+[id-of-particle-i id's of the particles which border-border distance is less than rc]
+
+
+
 ## Developers
 
 This project has been built, designed and maintained by the following authors:
