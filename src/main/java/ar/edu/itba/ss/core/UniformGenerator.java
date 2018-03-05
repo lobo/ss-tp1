@@ -1,6 +1,7 @@
 
 	package ar.edu.itba.ss.core;
 
+	import java.util.function.Consumer;
 	import java.util.stream.Stream;
 
 	import ar.edu.itba.ss.core.interfaces.ParticleGenerator;
@@ -18,18 +19,17 @@
 		protected final int size;
 		protected final double maxLength;
 		protected final double maxRadius;
+		protected final Consumer<Particle> consumer;
 
-		public UniformGenerator(
-				final int size,
-				final double maxLength,
-				final double maxRadius) {
-			this.size = size;
-			this.maxLength = maxLength;
-			this.maxRadius = maxRadius;
+		private UniformGenerator(final Builder builder) {
+			this.size = builder.size;
+			this.maxLength = builder.maxLength;
+			this.maxRadius = builder.maxRadius;
+			this.consumer = builder.consumer;
 		}
 
-		public UniformGenerator(final int size, final double maxLength) {
-			this(size, maxLength, 0);
+		public static Builder of(final int size) {
+			return new Builder(size);
 		}
 
 		@Override
@@ -39,11 +39,44 @@
 						Math.random() * maxLength,
 						Math.random() * maxLength,
 						Math.random() * maxRadius);
-			}).limit(size);
+			}).limit(size).peek(consumer);
 		}
 
 		@Override
 		public int size() {
 			return size;
+		}
+
+		public static final class Builder {
+
+			private final int size;
+			private double maxLength;
+			private double maxRadius;
+			private Consumer<Particle> consumer;
+
+			public Builder(final int size) {
+				this.size = size;
+				this.maxRadius = 0;
+				this.consumer = p -> {};
+			}
+
+			public Builder spy(final Consumer<Particle> consumer) {
+				this.consumer = consumer;
+				return this;
+			}
+
+			public Builder maxRadius(final double radius) {
+				this.maxRadius = radius;
+				return this;
+			}
+
+			public Builder over(final double maxLength) {
+				this.maxLength = maxLength;
+				return this;
+			}
+
+			public UniformGenerator build() {
+				return new UniformGenerator(this);
+			}
 		}
 	}

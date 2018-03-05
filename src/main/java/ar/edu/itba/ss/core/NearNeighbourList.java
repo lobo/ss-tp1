@@ -30,7 +30,6 @@
 
 		public static final class Builder {
 
-			// Se puede cachear con un generador especial.
 			private final ParticleGenerator generator;
 			private DistanceProcessor processor;
 			private Space space;
