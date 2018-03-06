@@ -1,6 +1,10 @@
 package ar.edu.itba.ss.core;
 
+import java.util.List;
+import java.util.function.Consumer;
 import java.util.stream.Stream;
+
+import static java.util.stream.Collectors.toList;
 
 import ar.edu.itba.ss.core.interfaces.ParticleGenerator;
 
@@ -17,18 +21,17 @@ public class UniformGenerator implements ParticleGenerator {
 	protected final int size;
 	protected final double maxLength;
 	protected final double maxRadius;
+	protected final Consumer<Particle> consumer;
 
-	public UniformGenerator(
-			final int size,
-			final double maxLength,
-			final double maxRadius) {
-		this.size = size;
-		this.maxLength = maxLength;
-		this.maxRadius = maxRadius;
+	private UniformGenerator(final Builder builder) {
+		this.size = builder.size;
+		this.maxLength = builder.maxLength;
+		this.maxRadius = builder.maxRadius;
+		this.consumer = builder.consumer;
 	}
 
-	public UniformGenerator(final int size, final double maxLength) {
-		this(size, maxLength, 0);
+	public static Builder of(final int size) {
+		return new Builder(size);
 	}
 
 	@Override
@@ -38,11 +41,66 @@ public class UniformGenerator implements ParticleGenerator {
 					Math.random() * maxLength,
 					Math.random() * maxLength,
 					Math.random() * maxRadius);
-		}).limit(size);
+		}).limit(size).peek(consumer);
 	}
 
 	@Override
 	public int size() {
 		return size;
+	}
+
+	public static final class Builder {
+
+		private final int size;
+		private double maxLength;
+		private double maxRadius;
+		private Consumer<Particle> consumer;
+		private boolean invariant;
+
+		public Builder(final int size) {
+			this.size = size;
+			this.maxRadius = 0;
+			this.maxLength = 1.0;
+			this.consumer = p -> {};
+			this.invariant = false;
+		}
+
+		public Builder spy(final Consumer<Particle> consumer) {
+			this.consumer = consumer;
+			return this;
+		}
+
+		public Builder maxRadius(final double radius) {
+			this.maxRadius = radius;
+			return this;
+		}
+
+		public Builder over(final double maxLength) {
+			this.maxLength = maxLength;
+			return this;
+		}
+
+		public Builder invariant(final boolean invariant) {
+			this.invariant = invariant;
+			return this;
+		}
+
+		public UniformGenerator build() {
+			return invariant?
+					new UniformGenerator(this) {
+
+						protected List<Particle> particles = null;
+
+						@Override
+						public Stream<Particle> generate() {
+							if (particles == null) {
+								particles = super.generate()
+									.collect(toList());
+							}
+							return particles.stream();
+						}
+					} :
+					new UniformGenerator(this);
+		}
 	}
 }

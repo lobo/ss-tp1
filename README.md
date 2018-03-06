@@ -84,5 +84,5 @@ xN yN
 
 This project has been built, designed and maintained by the following authors:
 
-* @lobo
-* @agustin-golmar
+* [Daniel Lobo](https://github.com/lobo)
+* [Agustín Golmar](https://github.com/agustin-golmar)
