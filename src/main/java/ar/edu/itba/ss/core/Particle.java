@@ -33,6 +33,7 @@ public class Particle {
 		return radius;
 	}
 
+	// Using a fixed border
 	public double distance(final Particle particle) {
 		return Math.hypot(x - particle.x, y - particle.y)
 				- radius

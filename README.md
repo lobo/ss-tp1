@@ -7,8 +7,8 @@ The program receives the following parameters:
 1. The positions (x,y) coordinates of the N particles that the system has.
 2. The radii of those particles
 3. N = number of particles
-4. L
-5. M
+4. L = length of the side
+5. M = number of cells
 6. rc
 7. COMPLETE THISWalls included: this is a boolean value. If true, the algorithm considers the wall
 

@@ -1,11 +1,15 @@
 package ar.edu.itba.ss;
 
+import java.util.List;
+import java.util.Map;
+
 //import java.util.List;
 //import java.util.Map;
 
 //import ar.edu.itba.ss.core.BruteForce;
 import ar.edu.itba.ss.core.CellIndexMethod;
 import ar.edu.itba.ss.core.NearNeighbourList;
+import ar.edu.itba.ss.core.Particle;
 //import ar.edu.itba.ss.core.OptimalGrid;
 //import ar.edu.itba.ss.core.Particle;
 import ar.edu.itba.ss.core.SquareSpace;
@@ -22,24 +26,26 @@ public final class Main {
 		/**/System.out.println("(2018) Cell Index Method.");
 		/**/final long start = System.nanoTime();
 
-		/*final Map<Particle, List<Particle>> nnl =*/ NearNeighbourList
-				.from(UniformGenerator.of(10000)
-						.invariant(true)
-						//.spy(p -> System.out.println(p))
-						.maxRadius(0.0)
-						.over(1.0)
+		final Map<Particle, List<Particle>> nnl = NearNeighbourList
+				.from(UniformGenerator.of(10000) // N (only used when not having a dynamic)
+						.invariant(true) // true will always return the same particle set
+						//.spy(p -> System.out.println(p)) // for debugging purposes
+						.maxRadius(0.0) // RADIO PARTICULA
+						.over(1.0) // L
 						.build())
-				.with(/*new BruteForce()*/CellIndexMethod
-						//.by(OptimalGrid.DENSITY_BASED)
-						.by(400)
+				.with(/*new BruteForce()*/CellIndexMethod // METHOD
+						//.by(OptimalGrid.DENSITY_BASED) // TO DO: only for CellIndexMethod
+						.by(400) // M (only for CellIndexMethod)
 						.build())
-				.over(SquareSpace.of(1.0)
-						.periodicBoundary(true)
+				.over(SquareSpace.of(1.0) // L
+						.periodicBoundary(true) // borde o no
 						.build())
-				.interactionRadius(0.3)
+				.interactionRadius(0.3) // RC
 				.cluster();
 
-		/**/System.out.println(
+		System.out.println(
 				"\n\tTime: " + 1E-9*(System.nanoTime() - start) + " sec.");
+		
+		System.out.println(nnl);
 	}
 }
