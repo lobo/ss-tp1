@@ -1,8 +1,11 @@
 
 	package ar.edu.itba.ss.core;
 
+	import java.util.List;
 	import java.util.function.Consumer;
 	import java.util.stream.Stream;
+
+	import static java.util.stream.Collectors.toList;
 
 	import ar.edu.itba.ss.core.interfaces.ParticleGenerator;
 
@@ -53,11 +56,14 @@
 			private double maxLength;
 			private double maxRadius;
 			private Consumer<Particle> consumer;
+			private boolean invariant;
 
 			public Builder(final int size) {
 				this.size = size;
 				this.maxRadius = 0;
+				this.maxLength = 1.0;
 				this.consumer = p -> {};
+				this.invariant = false;
 			}
 
 			public Builder spy(final Consumer<Particle> consumer) {
@@ -75,8 +81,27 @@
 				return this;
 			}
 
+			public Builder invariant(final boolean invariant) {
+				this.invariant = invariant;
+				return this;
+			}
+
 			public UniformGenerator build() {
-				return new UniformGenerator(this);
+				return invariant?
+						new UniformGenerator(this) {
+
+							protected List<Particle> particles = null;
+
+							@Override
+							public Stream<Particle> generate() {
+								if (particles == null) {
+									particles = super.generate()
+										.collect(toList());
+								}
+								return particles.stream();
+							}
+						} :
+						new UniformGenerator(this);
 			}
 		}
 	}

@@ -23,7 +23,8 @@
 				final double density = n / (length * length);
 
 				// Cómo se calcula?
-
+				/**/System.out.println("Density (δ): " + density);
+				/**/System.out.println("FALTA IMPLEMENTAR");
 				return 1; // Brute-force...
 			}
 		};

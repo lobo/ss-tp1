@@ -12,5 +12,5 @@
 
 El proyecto fue construido, es diseñado y mantenido por:
 
-* @lobo
-* @agustin-golmar
+* [Daniel Lobo](https://github.com/lobo)
+* [Agustín Golmar](https://github.com/agustin-golmar)
