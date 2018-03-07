@@ -50,6 +50,11 @@
 			return size;
 		}
 
+		@Override
+		public double maxRadius() {
+			return maxRadius;
+		}
+
 		public static final class Builder {
 
 			private final int size;

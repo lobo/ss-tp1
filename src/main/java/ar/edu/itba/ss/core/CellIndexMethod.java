@@ -7,7 +7,6 @@
 	import java.util.List;
 	import java.util.Map;
 	import java.util.Objects;
-	import java.util.function.BiFunction;
 	import java.util.function.Function;
 	import java.util.stream.Stream;
 
@@ -19,6 +18,7 @@
 	import java.awt.Point;
 
 	import ar.edu.itba.ss.core.interfaces.DistanceProcessor;
+	import ar.edu.itba.ss.core.interfaces.GranularityEstimator;
 	import ar.edu.itba.ss.core.interfaces.ParticleGenerator;
 	import ar.edu.itba.ss.core.interfaces.Space;
 
@@ -32,7 +32,7 @@
 
 	public class CellIndexMethod implements DistanceProcessor {
 
-		protected final BiFunction<Integer, Space, Integer> granularity;
+		protected final GranularityEstimator granularity;
 
 		public CellIndexMethod(final Builder builder) {
 			this.granularity = builder.granularity;
@@ -44,14 +44,19 @@
 				final Space space,
 				final double interactionRadius) {
 
-			final int M = granularity.apply(generator.size(), space);
+			final int M = granularity.estimate(
+					generator, space, interactionRadius);
 			final double C = space.dimensions().get(0)/M;
+
+			if (!isValid(generator, C, interactionRadius))
+				throw new IllegalStateException(
+					"Las dimensiones de la grilla no son consistentes con el radio de interacción.");
+
+			System.out.println("M: " + M);
 
 			final Map<Point, List<Particle>> cells = generator
 					.generate()
 					.collect(groupingBy(p -> {
-						// Si los grupos no son disjuntos, no usar 'groupingBy'.
-						// No considera el radio, por ahora.
 						final int x = (int) Math.min(Math.floor(p.getX()/C), M - 1);
 						final int y = (int) Math.min(Math.floor(p.getY()/C), M - 1);
 						return new Point(x, y);
@@ -92,25 +97,32 @@
 		}
 
 		public static Builder by(
-				final BiFunction<Integer, Space, Integer> granularity) {
+				final GranularityEstimator granularity) {
 			return new Builder(granularity);
 		}
 
 		public static Builder by(final int granularity) {
-			return by((n, s) -> granularity);
+			return by((g, s, r) -> granularity);
 		}
 
 		public static final class Builder {
 
-			private final BiFunction<Integer, Space, Integer> granularity;
+			private final GranularityEstimator granularity;
 
-			public Builder(final BiFunction<Integer, Space, Integer> granularity) {
+			public Builder(final GranularityEstimator granularity) {
 				this.granularity = granularity;
 			}
 
 			public CellIndexMethod build() {
 				return new CellIndexMethod(this);
 			}
+		}
+
+		private static boolean isValid(
+				final ParticleGenerator generator,
+				final double cellSize,
+				final double interactionRadius) {
+			return interactionRadius < (cellSize - 2 * generator.maxRadius());
 		}
 
 		private static void addOn(

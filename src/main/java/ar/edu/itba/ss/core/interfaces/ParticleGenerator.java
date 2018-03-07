@@ -16,4 +16,5 @@
 
 		public Stream<Particle> generate();
 		public int size();
+		public double maxRadius();
 	}
