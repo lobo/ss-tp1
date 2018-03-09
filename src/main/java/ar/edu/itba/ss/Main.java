@@ -1,14 +1,71 @@
+package ar.edu.itba.ss;
 
-	package ar.edu.itba.ss;
+import java.util.List;
+import java.util.Map;
 
-		/**
-		* <p>Punto de entrada principal de la simulación.</p>
-		*/
+//import java.util.List;
+//import java.util.Map;
 
-	public final class Main {
+//import ar.edu.itba.ss.core.BruteForce;
+import ar.edu.itba.ss.core.CellIndexMethod;
+import ar.edu.itba.ss.core.NearNeighbourList;
+import ar.edu.itba.ss.core.Particle;
+//import ar.edu.itba.ss.core.OptimalGrid;
+//import ar.edu.itba.ss.core.Particle;
+import ar.edu.itba.ss.core.SquareSpace;
+import ar.edu.itba.ss.core.UniformGenerator;
 
-		public static void main(final String [] arguments) {
+	/**
+	* <p>Punto de entrada principal de la simulación.</p>
+	*/
 
-			System.out.println("(2018) Cell Index Method.");
-		}
+public final class Main {
+
+	public static void main(final String [] arguments) {
+
+		/**/System.out.println("(2018) Cell Index Method.");
+		/**/final long start = System.nanoTime();
+
+		final Map<Particle, List<Particle>> nnl = NearNeighbourList
+				.from(UniformGenerator.of(10) // N (only used when not having a dynamic)
+						.invariant(true) // true will always return the same particle set
+						//.spy(p -> System.out.println(p)) // for debugging purposes
+						.maxRadius(0.0) // RADIO PARTICULA
+						.over(1.0) // L
+						.build())
+				.with(/*new BruteForce()*/CellIndexMethod // METHOD
+						//.by(OptimalGrid.DENSITY_BASED) // TO DO: only for CellIndexMethod
+						.by(4) // M (only for CellIndexMethod)
+						.build())
+				.over(SquareSpace.of(1.0) // L
+						.periodicBoundary(true) // borde o no
+						.build())
+				.interactionRadius(0.3) // RC
+				.cluster();
+
+		System.out.println(
+				"\n\tTime: " + 1E-9*(System.nanoTime() - start) + " sec.");
+		
+		nnl.forEach((particle, neighbours) -> {
+
+			System.out.println(
+					particle.hashCode() + ":(" +
+					particle.getX() + ", " +
+					particle.getY() + ", r:" +
+					particle.getRadius() + ") -> [" +
+					list(neighbours) + "]");
+		});
+				
 	}
+	
+	private static String list(final List<Particle> neighbours) {
+		String list = "";
+		for (final Particle particle : neighbours) {
+			list += particle.hashCode() + ", ";
+		}
+		if (!neighbours.isEmpty()) {
+			return list.substring(0, list.length() - 2);
+		}
+		else return list;
+	}
+}
