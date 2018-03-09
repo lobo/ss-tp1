@@ -4,17 +4,11 @@ import java.util.List;
 import java.util.Map;
 
 import ar.edu.itba.ss.core.BruteForce;
-
-//import java.util.List;
-//import java.util.Map;
-
-//import ar.edu.itba.ss.core.BruteForce;
 import ar.edu.itba.ss.core.CellIndexMethod;
+
 import ar.edu.itba.ss.core.NearNeighbourList;
 import ar.edu.itba.ss.core.OptimalGrid;
 import ar.edu.itba.ss.core.Particle;
-//import ar.edu.itba.ss.core.OptimalGrid;
-//import ar.edu.itba.ss.core.Particle;
 import ar.edu.itba.ss.core.SquareSpace;
 import ar.edu.itba.ss.core.UniformGenerator;
 
@@ -27,8 +21,8 @@ public final class Main {
 	private static final String HELP_TEXT = "Cell Index Method Implementation.\n" +
 	
 										"Arguments: \n" + 
-										"* cellindexmethod <N> <R> <L> <RC> \n" +
-										"* bruteforce <N> <R> <L> <RC> \n";
+										"* cellindexmethod <N> <R> <L> <RC> <true | false> \n" +
+										"* bruteforce <N> <R> <L> <RC> <true | false> \n";
 	
 	enum EXIT_CODE {
 		NO_ARGS(-1), // LISTO
@@ -80,9 +74,9 @@ public final class Main {
 	}
 	
 	
-	// Order of received parameters: N R L RC
+	// Order of received parameters: <N> <R> <L> <RC> <true|false>
 	private static void cellIndexMethod(String[] args, final long start) {
-		if (args.length != 5) {
+		if (args.length != 6) {
 			System.out.println("[FAIL] - Bad number of arguments. Try 'help' for more information.");
 			exit(EXIT_CODE.BAD_N_ARGUMENTS);
 		}
@@ -99,7 +93,7 @@ public final class Main {
 						//.by(4) // M (only for CellIndexMethod)
 						.build())
 				.over(SquareSpace.of(Double.valueOf(args[3])) // L
-						.periodicBoundary(true) // include border or not
+						.periodicBoundary(Boolean.valueOf(args[5])) // include border or not
 						.build())
 				.interactionRadius(Double.valueOf(args[4])) // RC
 				.cluster();
@@ -118,9 +112,9 @@ public final class Main {
 		});
 	}
 	
-	// Order of received parameters: N R L RC
+	// Order of received parameters: <N> <R> <L> <RC> <true|false>
 	private static void bruteForceMethod(String[] args, final long start) {
-		if (args.length != 5) {
+		if (args.length != 6) {
 			System.out.println("[FAIL] - Bad number of arguments. Try 'help' for more information.");
 			exit(EXIT_CODE.BAD_N_ARGUMENTS);
 		}
@@ -134,7 +128,7 @@ public final class Main {
 						.build())
 				.with(new BruteForce())
 				.over(SquareSpace.of(Double.valueOf(args[3])) // L
-						.periodicBoundary(true) // include border or not
+						.periodicBoundary(Boolean.valueOf(args[5])) // include border or not
 						.build())
 				.interactionRadius(Double.valueOf(args[4])) // RC
 				.cluster();

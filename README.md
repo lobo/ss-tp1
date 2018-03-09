@@ -33,16 +33,17 @@ This will generate a jar in the `target` folder.
 3. Execute
 
 ```
-$ java -jar nameOfTheJarFile [N] [L] [M] [rc] [1|0]
+$ java -jar nameOfTheJarFile [N] [R] [L] [RC] [true|false]
 ```
 
 Where:
 
 * [N] is the number of particles
+* [R] is the radius
 * [L] is the length of the side of the square
 * [M] 
-* [rc] is the radius
-* The fifth parameter can be 1 or 0: 1 to include particle walls, 0 to exclude them.
+* [RC] is the radius
+* The fifth parameter can be true or false: true to include particle walls, false to exclude them.
 
 
 ## Input files format
