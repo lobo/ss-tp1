@@ -1,5 +1,6 @@
 package ar.edu.itba.ss;
 
+import java.io.PrintStream;
 import java.util.List;
 import java.util.Map;
 
@@ -23,6 +24,8 @@ public final class Main {
 										"Arguments: \n" + 
 										"* cellindexmethod <N> <R> <L> <RC> <true | false> \n" +
 										"* bruteforce <N> <R> <L> <RC> <true | false> \n";
+	
+
 	
 	enum EXIT_CODE {
 		NO_ARGS(-1), // LISTO
@@ -58,7 +61,11 @@ public final class Main {
 			System.out.println(HELP_TEXT);
 			break;
 		case "cell":
-			cellIndexMethod(arguments, start);
+			if (arguments.length == 6) {
+				cellIndexMethod(arguments, start, 0);
+			} else if (arguments.length == 7) {
+				cellIndexMethod(arguments, start, arguments[6]);				
+			}
 			break;
 		case "brute":
 			bruteForceMethod(arguments, start);
@@ -72,32 +79,7 @@ public final class Main {
 		System.out.println("\n[DONE]");			
 	}
 	
-	
-	// Order of received parameters: <N> <R> <L> <RC> <true|false>
-	private static void cellIndexMethod(String[] args, final long start) {
-		if (args.length != 6) {
-			System.out.println("[FAIL] - Bad number of arguments. Try 'help' for more information.");
-			exit(EXIT_CODE.BAD_N_ARGUMENTS);
-		}
-		
-		System.out.println("Running Cell Index method...");
-		final Map<Particle, List<Particle>> nnl = NearNeighbourList
-				.from(UniformGenerator.of(Integer.valueOf(args[1])) // N (only used when not having a dynamic)
-						.invariant(true) // true will always return the same particle set
-						//.spy(p -> System.out.println(p)) // for debugging purposes
-						.maxRadius(Double.valueOf(args[2])) // RADIO PARTICULA
-						.over(Double.valueOf(args[3])) // L
-						.build())
-				.with(CellIndexMethod
-						.by(OptimalGrid.DENSITY_BASED) // TO DO: only for CellIndexMethod
-						//.by(4) // M (only for CellIndexMethod)
-						.build())
-				.over(SquareSpace.of(Double.valueOf(args[3])) // L
-						.periodicBoundary(Boolean.valueOf(args[5])) // include border or not
-						.build())
-				.interactionRadius(Double.valueOf(args[4])) // RC
-				.cluster();
-
+	private static void consoleLogs(final Map<Particle, List<Particle>> nnl, final long start) {
 		System.out.println(
 				"Execution Time: " + 1E-9*(System.nanoTime() - start) + " sec.\n");
 		
@@ -111,6 +93,39 @@ public final class Main {
 					particle.getRadius() + "\t- Neighbours IDs: [" +
 					list(neighbours) + "]");
 		});
+	}
+	
+	
+	// Order of received parameters: <N> <R> <L> <RC> <true|false> <M>
+	private static void cellIndexMethod(String[] args, final long start, final Double m) {
+		if (args.length != 6 || args.length != 7 ) {
+			System.out.println("[FAIL] - Bad number of arguments. Try 'help' for more information.");
+			exit(EXIT_CODE.BAD_N_ARGUMENTS);
+		}
+		
+		if (m.equals(0.0)) {
+			m = OptimalGrid.DENSITY_BASED; // HACER QUE SEA UN DOUBLE
+		}
+		
+		System.out.println("Running Cell Index method...");
+		final Map<Particle, List<Particle>> nnl = NearNeighbourList
+				.from(UniformGenerator.of(Integer.valueOf(args[1])) // N (only used when not having a dynamic)
+						.invariant(true) // true will always return the same particle set
+						//.spy(p -> System.out.println(p)) // for debugging purposes
+						.maxRadius(Double.valueOf(args[2])) // RADIO PARTICULA
+						.over(Double.valueOf(args[3])) // L
+						.build())
+				.with(CellIndexMethod
+						.by(m) 
+						.build())
+				.over(SquareSpace.of(Double.valueOf(args[3])) // L
+						.periodicBoundary(Boolean.valueOf(args[5])) // include border or not
+						.build())
+				.interactionRadius(Double.valueOf(args[4])) // RC
+				.cluster();
+
+		consoleLogs(nnl, start);
+		
 	}
 	
 	// Order of received parameters: <N> <R> <L> <RC> <true|false>
@@ -135,19 +150,8 @@ public final class Main {
 				.interactionRadius(Double.valueOf(args[4])) // RC
 				.cluster();
 		
-			System.out.println(
-					"Execution Time: " + 1E-9*(System.nanoTime() - start) + " sec.\n");
+		consoleLogs(nnl, start);	
 			
-			nnl.forEach((particle, neighbours) -> {
-
-				System.out.println(
-						"Particle ID: " + 
-						particle.hashCode() + "\t- Position: X: " +
-						particle.getX() + ";\t Y: " +
-						particle.getY() + "\t - R: " +
-						particle.getRadius() + "\t- Neighbours IDs: [" +
-						list(neighbours) + "]");
-			});
 	}
 	
 	private static String list(final List<Particle> neighbours) {

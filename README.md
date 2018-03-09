@@ -32,19 +32,24 @@ This will generate a jar in the `target` folder.
 
 ## Execute
 
+### Cell Index Method
+
 ```
-$ java -jar nameOfTheJarFile [cell | brute] [N] [R] [L] [RC] [true|false]
+$ java -jar nameOfTheJarFile cell [N] [R] [L] [RC] [true|false] <M>
 ```
 
-* Choose `cell` to apply the Cell Index Method.
-* Choose `brute` to apply Brute Force.
+### Brute Force
+
+```
+$ java -jar nameOfTheJarFile brute [N] [R] [L] [RC] [true|false]
+```
 
 Where:
 
 * [N] is the number of particles
 * [R] is the radius
 * [L] is the length of the side of the square
-* [M] 
+* [M] is an optional parameter (just for the Cell Index Method)
 * [RC] is the radius
 * The fifth parameter can be true or false: true to include particle walls, false to exclude them.
 
