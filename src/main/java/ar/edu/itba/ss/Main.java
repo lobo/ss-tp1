@@ -96,23 +96,18 @@ public final class Main {
 	}
 	
 	private static void fileLogs(final Map<Particle, List<Particle>> nnl, final long start) throws FileNotFoundException {
+		
+		System.out.println(
+				"Execution Time: " + 1E-9*(System.nanoTime() - start) + " sec.\n");
 
-		System.out.println("hola");
 		File file = new File("./file-output.txt");
 		FileOutputStream fos = new FileOutputStream(file);
 		PrintStream ps = new PrintStream(fos);
 		System.setOut(ps);
 		
-		System.out.println(
-				"Execution Time: " + 1E-9*(System.nanoTime() - start) + " sec.\n");
-
 		nnl.forEach((particle, neighbours) -> {
-
 			System.out.println( 
 					particle.hashCode() + " " +
-					particle.getX() + " " +
-					particle.getY() + " " +
-					particle.getRadius() + " " +
 					list(neighbours)
 					);
 		});
@@ -213,7 +208,7 @@ public final class Main {
 	private static String list(final List<Particle> neighbours) {
 		String list = "";
 		for (final Particle particle : neighbours) {
-			list += particle.hashCode() + ", ";
+			list += particle.hashCode() + " ";
 		}
 		if (!neighbours.isEmpty()) {
 			return list.substring(0, list.length() - 2);
