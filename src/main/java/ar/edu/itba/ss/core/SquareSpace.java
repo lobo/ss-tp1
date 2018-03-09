@@ -1,56 +1,57 @@
-package ar.edu.itba.ss.core;
 
-import java.util.Arrays;
-import java.util.List;
+	package ar.edu.itba.ss.core;
 
-import ar.edu.itba.ss.core.interfaces.Space;
+	import java.util.Arrays;
+	import java.util.List;
 
-	/**
-	* <p>Modela un espacio bidimensional cuadrado y finito, con o sin
-	* condiciones de contorno periódicas.</p>
-	*/
+	import ar.edu.itba.ss.core.interfaces.Space;
 
-public class SquareSpace implements Space {
+		/**
+		* <p>Modela un espacio bidimensional cuadrado y finito, con o sin
+		* condiciones de contorno periódicas.</p>
+		*/
 
-	protected final List<Double> dimensions;
-	protected final boolean periodic;
+	public class SquareSpace implements Space {
 
-	public SquareSpace(final Builder builder) {
-		this.dimensions = builder.dimensions;
-		this.periodic = builder.periodic;
-	}
+		protected final List<Double> dimensions;
+		protected final boolean periodic;
 
-	public static Builder of(final double length) {
-		return new Builder(Arrays.asList(length, length));
-	}
-
-	@Override
-	public List<Double> dimensions() {
-		return dimensions;
-	}
-
-	@Override
-	public boolean hasPeriodicBoundary() {
-		return periodic;
-	}
-
-	public static final class Builder {
-
-		private final List<Double> dimensions;
-		private boolean periodic;
-
-		public Builder(final List<Double> dimensions) {
-			this.dimensions = dimensions;
-			this.periodic = false;
+		public SquareSpace(final Builder builder) {
+			this.dimensions = builder.dimensions;
+			this.periodic = builder.periodic;
 		}
 
-		public Builder periodicBoundary(final boolean periodic) {
-			this.periodic = periodic;
-			return this;
+		public static Builder of(final double length) {
+			return new Builder(Arrays.asList(length, length));
 		}
 
-		public SquareSpace build() {
-			return new SquareSpace(this);
+		@Override
+		public List<Double> dimensions() {
+			return dimensions;
+		}
+
+		@Override
+		public boolean hasPeriodicBoundary() {
+			return periodic;
+		}
+
+		public static final class Builder {
+
+			private final List<Double> dimensions;
+			private boolean periodic;
+
+			public Builder(final List<Double> dimensions) {
+				this.dimensions = dimensions;
+				this.periodic = false;
+			}
+
+			public Builder periodicBoundary(final boolean periodic) {
+				this.periodic = periodic;
+				return this;
+			}
+
+			public SquareSpace build() {
+				return new SquareSpace(this);
+			}
 		}
 	}
-}

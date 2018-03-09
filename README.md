@@ -78,7 +78,6 @@ xN yN
 [id-of-particle-i id's of the particles which border-border distance is less than rc]
 ```
 
-
 ## Developers
 
 This project has been built, designed and maintained by the following authors:
