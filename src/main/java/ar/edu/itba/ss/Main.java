@@ -50,9 +50,7 @@ public final class Main {
 		System.exit(exitCode.getCode());
 	}
 
-	public static void main(final String [] arguments) throws FileNotFoundException {
-		System.out.println(arguments.length);
-		
+	public static void main(final String [] arguments) throws FileNotFoundException {		
 		if (arguments.length == 0) {
 			System.out.println("[FAIL] - No arguments passed. Try 'help' for more information.");
 			exit(EXIT_CODE.NO_ARGS);
