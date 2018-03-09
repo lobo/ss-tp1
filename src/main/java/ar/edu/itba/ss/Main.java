@@ -95,12 +95,13 @@ public final class Main {
 		});
 	}
 	
-	private static void fileLogs(final Map<Particle, List<Particle>> nnl, final long start) throws FileNotFoundException {
+	private static void fileLogs(final Map<Particle, List<Particle>> nnl, final long start, final String output_filename) throws FileNotFoundException {
 		
 		System.out.println(
 				"Execution Time: " + 1E-9*(System.nanoTime() - start) + " sec.\n");
 
-		File file = new File("./file-output.txt");
+		final String filename = "./" + output_filename + ".txt";
+		File file = new File(filename);
 		FileOutputStream fos = new FileOutputStream(file);
 		PrintStream ps = new PrintStream(fos);
 		System.setOut(ps);
@@ -143,7 +144,7 @@ public final class Main {
 				logging(nnl, start);
 				
 			} else {
-				fileLogs(nnl, start);
+				fileLogs(nnl, start, output_filename);
 			}
 			
 		} else {
@@ -168,7 +169,7 @@ public final class Main {
 				logging(nnl, start);
 				
 			} else {
-				fileLogs(nnl, start);
+				fileLogs(nnl, start, output_filename);
 			}
 		}
 		
@@ -200,7 +201,7 @@ public final class Main {
 			logging(nnl, start);
 			
 		} else {
-			fileLogs(nnl, start);
+			fileLogs(nnl, start, output_filename);
 		}
 			
 	}
