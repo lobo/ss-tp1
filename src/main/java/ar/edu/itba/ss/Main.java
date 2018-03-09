@@ -104,10 +104,11 @@ public final class Main {
 		nnl.forEach((particle, neighbours) -> {
 
 			System.out.println(
-					particle.hashCode() + ":(" +
-					particle.getX() + ", " +
-					particle.getY() + ", r:" +
-					particle.getRadius() + ") -> [" +
+					"Particle ID: " + 
+					particle.hashCode() + "\t- Position: X: " +
+					particle.getX() + ";\t Y: " +
+					particle.getY() + "\t - R: " +
+					particle.getRadius() + "\t- Neighbours IDs: [" +
 					list(neighbours) + "]");
 		});
 	}
