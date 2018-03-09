@@ -35,23 +35,25 @@ This will generate a jar in the `target` folder.
 ### Cell Index Method
 
 ```
-$ java -jar nameOfTheJarFile cell [N] [R] [L] [RC] [true|false] <M>
+$ java -jar nameOfTheJarFile cell [N] [R] [L] [RC] [true|false] <M> <filename>
 ```
 
 ### Brute Force
 
 ```
-$ java -jar nameOfTheJarFile brute [N] [R] [L] [RC] [true|false]
+$ java -jar nameOfTheJarFile brute [N] [R] [L] [RC] [true|false] <filename>
 ```
 
 Where:
 
-* [N] is the number of particles
-* [R] is the radius
-* [L] is the length of the side of the square
-* [M] is an optional parameter (just for the Cell Index Method)
-* [RC] is the radius
+* `[N]` is the number of particles
+* `[R]` is the radius
+* `[L]` is the length of the side of the square
+* `[M]` is an optional parameter (just for the Cell Index Method)
+* `[RC]` is the radius
 * The fifth parameter can be true or false: true to include particle walls, false to exclude them.
+* `<filename>` is the name of the file (without the extension). If entered `null` the output will only be via console. 
+The output file can be found on the root of the project with a `.txt` extension. 
 
 ## Help
 
