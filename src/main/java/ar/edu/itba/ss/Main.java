@@ -61,19 +61,19 @@ public final class Main {
 		final long start = System.nanoTime();
 		
 		switch (arguments[0]) {
-		case "help":
-			System.out.println(HELP_TEXT);
-			break;
-		case "cell":
-			cellIndexMethod(arguments, start, Integer.valueOf(arguments[6]), arguments[7]);
-			break;
-		case "brute":
-			bruteForceMethod(arguments, start, arguments[6]);
-			break;
-		default:
-			System.out.println("[FAIL] - Invalid argument. Try 'help' for more information.");
-			exit(EXIT_CODE.BAD_ARGUMENT);
-			break;
+			case "help":
+				System.out.println(HELP_TEXT);
+				break;
+			case "cell":
+				cellIndexMethod(arguments, start, Integer.valueOf(arguments[6]), arguments[7]);
+				break;
+			case "brute":
+				bruteForceMethod(arguments, start, arguments[6]);
+				break;
+			default:
+				System.out.println("[FAIL] - Invalid argument. Try 'help' for more information.");
+				exit(EXIT_CODE.BAD_ARGUMENT);
+				break;
 		}
 		
 		System.out.println("\n[DONE]");			
