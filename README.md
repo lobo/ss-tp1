@@ -9,12 +9,12 @@ The program receives the following parameters:
 3. N = number of particles
 4. L = length of the side
 5. M = number of cells
-6. rc
-7. COMPLETE THISWalls included: this is a boolean value. If true, the algorithm considers the wall
+6. RC
+7. Walls included: this is a boolean value. If true, the algorithm considers the wall
 
 The program outputs the following:
 
-* For every particle, a list with all the particles that are near in less than rc
+* For every particle, a list with all the particles that are near in less than RC
 * Execution time
 * A picture that shows the position of all the particles, which can also enable the selection of one of them and its neighbors.
 
