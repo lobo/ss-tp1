@@ -26,9 +26,9 @@ public final class Main {
 	
 										"Arguments: \n" + 
 										"* cell <N> <R> <L> <RC> <true | false> <M> <filename>\n" +
-										"* brute <N> <R> <L> <RC> <true | false> <filename> \n";
-	
-
+										"* cellfile <staticFile> <dynamicFile> <L> <RC> <true | false> <M> <filename>\n" +
+										"* brute <N> <R> <L> <RC> <true | false> <filename> \n" +
+										"* brutefile <staticFile> <dynamicFile> <L> <RC> <true | false> <M> <filename>\n";
 	
 	enum EXIT_CODE {
 		NO_ARGS(-1), // LISTO
@@ -67,6 +67,10 @@ public final class Main {
 				break;
 			case "brute":
 				bruteForceMethod(arguments, start, arguments[6]);
+				break;
+			case "cellfile":
+				break;
+			case "brutefile":
 				break;
 			default:
 				System.out.println("[FAIL] - Invalid argument. Try 'help' for more information.");

@@ -34,11 +34,28 @@ This will generate a jar in the `target` folder.
 
 ### Cell Index Method
 
+#### Using this with input files
+
+```
+$ java -jar nameOfTheJarFile cellfile <staticFile> <dynamicFile> [L] [RC] [true|false] <M> <filename>
+```
+
+#### Using this without input files
+
 ```
 $ java -jar nameOfTheJarFile cell [N] [R] [L] [RC] [true|false] <M> <filename>
 ```
 
 ### Brute Force
+
+#### Using this with input files
+
+```
+$ java -jar nameOfTheJarFile brutefile <staticFile> <dynamicFile> [L] [RC] [true|false] <M> <filename>
+```
+
+
+#### Using this without input files
 
 ```
 $ java -jar nameOfTheJarFile brute [N] [R] [L] [RC] [true|false] <filename>
