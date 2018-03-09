@@ -70,7 +70,7 @@ public final class Main {
 			break;
 		}
 		
-		System.out.println("[DONE]");			
+		System.out.println("\n[DONE]");			
 	}
 	
 	
@@ -99,7 +99,7 @@ public final class Main {
 				.cluster();
 
 		System.out.println(
-				"\n\tTime: " + 1E-9*(System.nanoTime() - start) + " sec.");
+				"\nExecution Time: " + 1E-9*(System.nanoTime() - start) + " sec.\n");
 		
 		nnl.forEach((particle, neighbours) -> {
 
@@ -135,15 +135,16 @@ public final class Main {
 				.cluster();
 		
 			System.out.println(
-					"\n\tTime: " + 1E-9*(System.nanoTime() - start) + " sec.");
+					"\nExecution Time: " + 1E-9*(System.nanoTime() - start) + " sec.\n");
 			
 			nnl.forEach((particle, neighbours) -> {
-		
+
 				System.out.println(
-						particle.hashCode() + ":(" +
-						particle.getX() + ", " +
-						particle.getY() + ", r:" +
-						particle.getRadius() + ") -> [" +
+						"Particle ID: " + 
+						particle.hashCode() + "\t- Position: X: " +
+						particle.getX() + ";\t Y: " +
+						particle.getY() + "\t - R: " +
+						particle.getRadius() + "\t- Neighbours IDs: [" +
 						list(neighbours) + "]");
 			});
 	}

@@ -30,11 +30,14 @@ $ mvn clean package
 
 This will generate a jar in the `target` folder.
 
-3. Execute
+## Execute
 
 ```
-$ java -jar nameOfTheJarFile [N] [R] [L] [RC] [true|false]
+$ java -jar nameOfTheJarFile [cell | brute] [N] [R] [L] [RC] [true|false]
 ```
+
+* Choose `cell` to apply the Cell Index Method.
+* Choose `brute` to apply Brute Force.
 
 Where:
 
@@ -45,6 +48,11 @@ Where:
 * [RC] is the radius
 * The fifth parameter can be true or false: true to include particle walls, false to exclude them.
 
+## Help
+
+```
+$ java -jar nameOfTheJarFile help
+```
 
 ## Input files format
 
