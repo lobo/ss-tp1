@@ -3,12 +3,15 @@ package ar.edu.itba.ss;
 import java.util.List;
 import java.util.Map;
 
+import ar.edu.itba.ss.core.BruteForce;
+
 //import java.util.List;
 //import java.util.Map;
 
 //import ar.edu.itba.ss.core.BruteForce;
 import ar.edu.itba.ss.core.CellIndexMethod;
 import ar.edu.itba.ss.core.NearNeighbourList;
+import ar.edu.itba.ss.core.OptimalGrid;
 import ar.edu.itba.ss.core.Particle;
 //import ar.edu.itba.ss.core.OptimalGrid;
 //import ar.edu.itba.ss.core.Particle;
@@ -20,27 +23,85 @@ import ar.edu.itba.ss.core.UniformGenerator;
 	*/
 
 public final class Main {
+	
+	private static final String HELP_TEXT = "Cell Index Method Implementation.\n" +
+	
+										"Arguments: \n" + 
+										"* cellindexmethod <N> <R> <L> <RC> \n" +
+										"* bruteforce <N> <R> <L> <RC> \n";
+	
+	enum EXIT_CODE {
+		NO_ARGS(-1), // LISTO
+		BAD_N_ARGUMENTS(-2),
+		BAD_ARGUMENT(-3);
+		
+		private final int code;
+		
+		EXIT_CODE(final int code) {
+			this.code = code;
+		}
+		
+		public int getCode() {
+			return code;
+		}
+	}
+	
+	private static void exit(final EXIT_CODE exitCode) {
+		System.exit(exitCode.getCode());
+	}
 
 	public static void main(final String [] arguments) {
+		
+		if (arguments.length == 0) {
+			System.out.println("[FAIL] - No arguments passed. Try 'help' for more information.");
+			exit(EXIT_CODE.NO_ARGS);
+		}
 
 		/**/System.out.println("(2018) Cell Index Method.");
 		/**/final long start = System.nanoTime();
-
+		
+		switch (arguments[0]) {
+		case "help":
+			System.out.println(HELP_TEXT);
+			break;
+		case "cell":
+			cellIndexMethod(arguments, start);
+			break;
+		case "brute":
+			bruteForceMethod(arguments, start);
+			break;
+		default:
+			System.out.println("[FAIL] - Invalid argument. Try 'help' for more information.");
+			exit(EXIT_CODE.BAD_ARGUMENT);
+			break;
+		}
+		
+		System.out.println("[DONE]");			
+	}
+	
+	
+	// Order of received parameters: N R L RC
+	private static void cellIndexMethod(String[] args, final long start) {
+		if (args.length != 5) {
+			System.out.println("[FAIL] - Bad number of arguments. Try 'help' for more information.");
+			exit(EXIT_CODE.BAD_N_ARGUMENTS);
+		}
+		
 		final Map<Particle, List<Particle>> nnl = NearNeighbourList
-				.from(UniformGenerator.of(10) // N (only used when not having a dynamic)
+				.from(UniformGenerator.of(Integer.valueOf(args[1])) // N (only used when not having a dynamic)
 						.invariant(true) // true will always return the same particle set
 						//.spy(p -> System.out.println(p)) // for debugging purposes
-						.maxRadius(0.0) // RADIO PARTICULA
-						.over(1.0) // L
+						.maxRadius(Double.valueOf(args[2])) // RADIO PARTICULA
+						.over(Double.valueOf(args[3])) // L
 						.build())
-				.with(/*new BruteForce()*/CellIndexMethod // METHOD
-						//.by(OptimalGrid.DENSITY_BASED) // TO DO: only for CellIndexMethod
-						.by(4) // M (only for CellIndexMethod)
+				.with(CellIndexMethod
+						.by(OptimalGrid.DENSITY_BASED) // TO DO: only for CellIndexMethod
+						//.by(4) // M (only for CellIndexMethod)
 						.build())
-				.over(SquareSpace.of(1.0) // L
-						.periodicBoundary(true) // borde o no
+				.over(SquareSpace.of(Double.valueOf(args[3])) // L
+						.periodicBoundary(true) // include border or not
 						.build())
-				.interactionRadius(0.3) // RC
+				.interactionRadius(Double.valueOf(args[4])) // RC
 				.cluster();
 
 		System.out.println(
@@ -55,7 +116,41 @@ public final class Main {
 					particle.getRadius() + ") -> [" +
 					list(neighbours) + "]");
 		});
-				
+	}
+	
+	// Order of received parameters: N R L RC
+	private static void bruteForceMethod(String[] args, final long start) {
+		if (args.length != 5) {
+			System.out.println("[FAIL] - Bad number of arguments. Try 'help' for more information.");
+			exit(EXIT_CODE.BAD_N_ARGUMENTS);
+		}
+		
+		final Map<Particle, List<Particle>> nnl = NearNeighbourList
+				.from(UniformGenerator.of(Integer.valueOf(args[1])) // N (only used when not having a dynamic)
+						.invariant(true) // true will always return the same particle set
+						//.spy(p -> System.out.println(p)) // for debugging purposes
+						.maxRadius(Double.valueOf(args[2])) // RADIO PARTICULA
+						.over(Double.valueOf(args[3])) // L
+						.build())
+				.with(new BruteForce())
+				.over(SquareSpace.of(Double.valueOf(args[3])) // L
+						.periodicBoundary(true) // include border or not
+						.build())
+				.interactionRadius(Double.valueOf(args[4])) // RC
+				.cluster();
+		
+			System.out.println(
+					"\n\tTime: " + 1E-9*(System.nanoTime() - start) + " sec.");
+			
+			nnl.forEach((particle, neighbours) -> {
+		
+				System.out.println(
+						particle.hashCode() + ":(" +
+						particle.getX() + ", " +
+						particle.getY() + ", r:" +
+						particle.getRadius() + ") -> [" +
+						list(neighbours) + "]");
+			});
 	}
 	
 	private static String list(final List<Particle> neighbours) {
