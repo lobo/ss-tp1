@@ -27,7 +27,7 @@ public final class Main {
 		/**/final long start = System.nanoTime();
 
 		final Map<Particle, List<Particle>> nnl = NearNeighbourList
-				.from(UniformGenerator.of(10000) // N (only used when not having a dynamic)
+				.from(UniformGenerator.of(10) // N (only used when not having a dynamic)
 						.invariant(true) // true will always return the same particle set
 						//.spy(p -> System.out.println(p)) // for debugging purposes
 						.maxRadius(0.0) // RADIO PARTICULA
@@ -35,7 +35,7 @@ public final class Main {
 						.build())
 				.with(/*new BruteForce()*/CellIndexMethod // METHOD
 						//.by(OptimalGrid.DENSITY_BASED) // TO DO: only for CellIndexMethod
-						.by(400) // M (only for CellIndexMethod)
+						.by(4) // M (only for CellIndexMethod)
 						.build())
 				.over(SquareSpace.of(1.0) // L
 						.periodicBoundary(true) // borde o no
@@ -46,6 +46,26 @@ public final class Main {
 		System.out.println(
 				"\n\tTime: " + 1E-9*(System.nanoTime() - start) + " sec.");
 		
-		System.out.println(nnl);
+		nnl.forEach((particle, neighbours) -> {
+
+			System.out.println(
+					particle.hashCode() + ":(" +
+					particle.getX() + ", " +
+					particle.getY() + ", r:" +
+					particle.getRadius() + ") -> [" +
+					list(neighbours) + "]");
+		});
+				
+	}
+	
+	private static String list(final List<Particle> neighbours) {
+		String list = "";
+		for (final Particle particle : neighbours) {
+			list += particle.hashCode() + ", ";
+		}
+		if (!neighbours.isEmpty()) {
+			return list.substring(0, list.length() - 2);
+		}
+		else return list;
 	}
 }

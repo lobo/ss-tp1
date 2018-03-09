@@ -20,18 +20,17 @@ The program outputs the following:
 
 
 
-## Running instructions [TO DO]
+## Build
 
-1. Clone this repository.
-2. On the root folder, compile the project by running
+To build the project, it is necessary to have Maven and Java 1.8 installed. Then, run
 
 ```
-$ mvn package
+$ mvn clean package
 ```
 
 This will generate a jar in the `target` folder.
 
-3. To run, execute the following command:
+3. Execute
 
 ```
 $ java -jar nameOfTheJarFile [N] [L] [M] [rc] [1|0]

@@ -1,3 +1,4 @@
+
 package ar.edu.itba.ss.core;
 
 import java.util.List;
@@ -47,6 +48,11 @@ public class UniformGenerator implements ParticleGenerator {
 	@Override
 	public int size() {
 		return size;
+	}
+
+	@Override
+	public double maxRadius() {
+		return maxRadius;
 	}
 
 	public static final class Builder {
