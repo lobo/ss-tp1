@@ -18,3 +18,8 @@
 		public int size();
 		public double maxRadius();
 	}
+	
+	
+	//new Particle(x,y,z)
+	//List<Particle> list
+	// list.generate()

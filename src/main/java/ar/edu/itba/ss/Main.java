@@ -25,8 +25,8 @@ public final class Main {
 	private static final String HELP_TEXT = "Cell Index Method Implementation.\n" +
 	
 										"Arguments: \n" + 
-										"* cellindexmethod <N> <R> <L> <RC> <true | false> \n" +
-										"* bruteforce <N> <R> <L> <RC> <true | false> \n";
+										"* cell <N> <R> <L> <RC> <true | false> <M> <filename>\n" +
+										"* brute <N> <R> <L> <RC> <true | false> <filename> \n";
 	
 
 	
@@ -51,6 +51,7 @@ public final class Main {
 	}
 
 	public static void main(final String [] arguments) throws FileNotFoundException {
+		System.out.println(arguments.length);
 		
 		if (arguments.length == 0) {
 			System.out.println("[FAIL] - No arguments passed. Try 'help' for more information.");
@@ -64,14 +65,10 @@ public final class Main {
 			System.out.println(HELP_TEXT);
 			break;
 		case "cell":
-			if (arguments.length == 7) {
-				cellIndexMethod(arguments, start, 0, Boolean.valueOf(arguments[7]));
-			} else if (arguments.length == 8) {
-				cellIndexMethod(arguments, start, Integer.valueOf(arguments[5]), Boolean.valueOf(arguments[7]));				
-			}
+			cellIndexMethod(arguments, start, Integer.valueOf(arguments[6]), arguments[7]);
 			break;
 		case "brute":
-			bruteForceMethod(arguments, start);
+			bruteForceMethod(arguments, start, arguments[6]);
 			break;
 		default:
 			System.out.println("[FAIL] - Invalid argument. Try 'help' for more information.");
@@ -122,9 +119,9 @@ public final class Main {
 	}
 	
 	
-	// Order of received parameters: <N> <R> <L> <RC> <true|false> <M>
-	private static void cellIndexMethod(String[] args, final long start, final Integer m, final Boolean bool) throws FileNotFoundException {
-		if (args.length != 7 || args.length != 8 ) {
+	// Order of received parameters: <N> <R> <L> <RC> <true|false> <M> <filename>
+	private static void cellIndexMethod(String[] args, final long start, final Integer m, final String output_filename) throws FileNotFoundException {
+		if (args.length != 8 ) {
 			System.out.println("[FAIL] - Bad number of arguments. Try 'help' for more information.");
 			exit(EXIT_CODE.BAD_N_ARGUMENTS);
 		}
@@ -139,7 +136,7 @@ public final class Main {
 							.over(Double.valueOf(args[3])) // L
 							.build())
 					.with(CellIndexMethod
-							.by(OptimalGrid.DENSITY_BASED)
+							.by(OptimalGrid.AUTOMATIC)
 							.build())
 					.over(SquareSpace.of(Double.valueOf(args[3])) // L
 							.periodicBoundary(Boolean.valueOf(args[5])) // include border or not
@@ -147,10 +144,11 @@ public final class Main {
 					.interactionRadius(Double.valueOf(args[4])) // RC
 					.cluster();
 			
-			if (Boolean.valueOf(args[7]).equals(true)) {
-				fileLogs(nnl, start);
-			} else {
+			if (output_filename.equals("null")) {
 				logging(nnl, start);
+				
+			} else {
+				fileLogs(nnl, start);
 			}
 			
 		} else {
@@ -171,17 +169,18 @@ public final class Main {
 					.interactionRadius(Double.valueOf(args[4])) // RC
 					.cluster();
 			
-			if (Boolean.valueOf(args[7]).equals(true)) {
-				fileLogs(nnl, start);
-			} else {
+			if (output_filename.equals("null")) {
 				logging(nnl, start);
+				
+			} else {
+				fileLogs(nnl, start);
 			}
 		}
 		
 	}
 	
-	// Order of received parameters: <N> <R> <L> <RC> <true|false>
-	private static void bruteForceMethod(String[] args, final long start) {
+	// Order of received parameters: <N> <R> <L> <RC> <true|false> <filename>
+	private static void bruteForceMethod(String[] args, final long start, final String output_filename) throws FileNotFoundException {
 		if (args.length != 7) {
 			System.out.println("[FAIL] - Bad number of arguments. Try 'help' for more information.");
 			exit(EXIT_CODE.BAD_N_ARGUMENTS);
@@ -202,7 +201,12 @@ public final class Main {
 				.interactionRadius(Double.valueOf(args[4])) // RC
 				.cluster();
 		
-		logging(nnl, start);	
+		if (output_filename.equals("null")) {
+			logging(nnl, start);
+			
+		} else {
+			fileLogs(nnl, start);
+		}
 			
 	}
 	
