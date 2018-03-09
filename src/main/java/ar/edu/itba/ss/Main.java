@@ -50,9 +50,8 @@ public final class Main {
 			System.out.println("[FAIL] - No arguments passed. Try 'help' for more information.");
 			exit(EXIT_CODE.NO_ARGS);
 		}
-
-		/**/System.out.println("(2018) Cell Index Method.");
-		/**/final long start = System.nanoTime();
+		
+		final long start = System.nanoTime();
 		
 		switch (arguments[0]) {
 		case "help":
@@ -81,6 +80,7 @@ public final class Main {
 			exit(EXIT_CODE.BAD_N_ARGUMENTS);
 		}
 		
+		System.out.println("Running Cell Index method...");
 		final Map<Particle, List<Particle>> nnl = NearNeighbourList
 				.from(UniformGenerator.of(Integer.valueOf(args[1])) // N (only used when not having a dynamic)
 						.invariant(true) // true will always return the same particle set
@@ -99,7 +99,7 @@ public final class Main {
 				.cluster();
 
 		System.out.println(
-				"\nExecution Time: " + 1E-9*(System.nanoTime() - start) + " sec.\n");
+				"Execution Time: " + 1E-9*(System.nanoTime() - start) + " sec.\n");
 		
 		nnl.forEach((particle, neighbours) -> {
 
@@ -120,6 +120,7 @@ public final class Main {
 			exit(EXIT_CODE.BAD_N_ARGUMENTS);
 		}
 		
+		System.out.println("Running Brute Force method...");
 		final Map<Particle, List<Particle>> nnl = NearNeighbourList
 				.from(UniformGenerator.of(Integer.valueOf(args[1])) // N (only used when not having a dynamic)
 						.invariant(true) // true will always return the same particle set
@@ -135,7 +136,7 @@ public final class Main {
 				.cluster();
 		
 			System.out.println(
-					"\nExecution Time: " + 1E-9*(System.nanoTime() - start) + " sec.\n");
+					"Execution Time: " + 1E-9*(System.nanoTime() - start) + " sec.\n");
 			
 			nnl.forEach((particle, neighbours) -> {
 
