@@ -43,7 +43,7 @@
 				// Cómo se calcula?
 				/**/System.out.println("Density (δ): " + δ);
 				/**/System.out.println("FALTA IMPLEMENTAR");
-				return 1; // Brute-force...
+				return AUTOMATIC.estimate(generator, space, interactionRadius);
 			}
 		};
 	}

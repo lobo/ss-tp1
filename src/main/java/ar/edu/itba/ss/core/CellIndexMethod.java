@@ -51,8 +51,7 @@
 			if (!isValid(generator, C, interactionRadius))
 				throw new IllegalStateException(
 					"Las dimensiones de la grilla no son consistentes con el radio de interacción.");
-
-			System.out.println("M: " + M);
+			else System.out.println("Usando M = " + M);
 
 			final Map<Point, List<Particle>> cells = generator
 					.generate()
@@ -68,27 +67,23 @@
 							identity(),
 							p -> adjacent(p, space, M)));
 
-			// Resultados:
 			final Map<Particle, List<Particle>> result = new HashMap<>();
 
 			cells.entrySet().stream()
 				.forEach(e -> {
-					final List<Particle> c1 = e.getValue();				// Por cada celda
-					final List<Point> a = adjacents.get(e.getKey());	// Calculo celdas adyacentes
-
-					// Cada celda adyacente se convierte en una lista de vecinos para 'p1':
-					for (final Particle p1 : c1) {						// Y por cada partícula en ella
+					final List<Particle> c1 = e.getValue();
+					final List<Point> a = adjacents.get(e.getKey());
+					for (final Particle p1 : c1) {
 						final Function<Particle, Double> distance = Particle
 							.distanceFactory(p1, space);
 						final List<Particle> neighbours = a.stream()
-							.map(cell -> cells.get(cell))				// Obtengo las partículas de cada celda
-							.filter(Objects::nonNull)					// Quito las celdas vacías
-							.flatMap(List::stream)						// Hago una 'bolsa' de partículas
-							.filter(p2 -> p1 != p2)						// Distintas a 'p1'
-							.filter(p2 -> distance.apply(p2) <= interactionRadius)	// Que interaccionan
-							.peek(p2 -> addOn(p2, p1, result))			// Simetría
+							.map(cell -> cells.get(cell))
+							.filter(Objects::nonNull)
+							.flatMap(List::stream)
+							.filter(p2 -> p1 != p2)
+							.filter(p2 -> distance.apply(p2) <= interactionRadius)
+							.peek(p2 -> addOn(p2, p1, result))
 							.collect(toList());
-
 						result.merge(p1, neighbours, CellIndexMethod::merge);
 					}
 				});
