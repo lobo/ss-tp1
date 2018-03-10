@@ -1,6 +1,7 @@
 package ar.edu.itba.ss;
 
 import java.io.File;
+import java.io.FileDescriptor;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -85,8 +86,8 @@ public final class Main {
 				exit(EXIT_CODE.BAD_ARGUMENT);
 				break;
 		}
-		
-		System.out.println("\n[DONE]");			
+
+		printExecutionTime(start);		
 	}
 	
 	// cellfile <staticFile> <dynamicFile> <L> <RC> <true | false> <M> <filename>
@@ -208,6 +209,7 @@ public final class Main {
 	}
 	
 	// brutefile <staticFile> <dynamicFile> <RC> <true | false> <filename>
+	// READY
 	private static void bruteForceMethodFile(String[] args, final long start) throws NumberFormatException, IOException {
 		if (args.length != 8) {
 			System.out.println("[FAIL] - Bad number of arguments. Try 'help' for more information.");
@@ -238,11 +240,11 @@ public final class Main {
 					particle.getRadius() + "\t- Neighbours IDs: [" +
 					list(neighbours) + "]");
 		});
-		
-		printExecutionTime(start);
+	
 	}	
 	
 	private static void fileLogging(final Map<Particle, List<Particle>> nnl, final long start, final String output_filename) throws FileNotFoundException {
+		System.out.println("The output has been written into a file.");
 		final String filename = "./" + output_filename + ".txt";
 		File file = new File(filename);
 		FileOutputStream fos = new FileOutputStream(file);
@@ -255,8 +257,6 @@ public final class Main {
 					list(neighbours)
 					);
 		});
-		
-		printExecutionTime(start);
 	}
 	
 	private static void smartLogging(Map<Particle, List<Particle>> nnl, final long start, String filename) throws FileNotFoundException {
@@ -269,9 +269,15 @@ public final class Main {
 	}
 	
 	private static void printExecutionTime(final long start) {
+		PrintStream consoleStream = new PrintStream(
+                new FileOutputStream(FileDescriptor.out));
+				
+		System.setOut(consoleStream);
 		System.out.println(
 				"Execution Time: " + 1E-9*(System.nanoTime() - start) + " sec.\n");
+		System.out.println("\n[DONE]");	
 	}
+	
 	
 	private static String list(final List<Particle> neighbours) {
 		String list = "";
