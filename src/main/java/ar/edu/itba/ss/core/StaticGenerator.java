@@ -17,13 +17,10 @@ import java.util.regex.Pattern;
 import ar.edu.itba.ss.core.UniformGenerator.Builder;
 import ar.edu.itba.ss.core.interfaces.ParticleGenerator;
 
-//new Particle(x,y,z)
-//List<Particle> list
-// list.generate()
 public class StaticGenerator implements ParticleGenerator{
 
-	private int size;
-	private double ele;
+	private int size;	// N
+	private double ele;	// L 
 	private double maxRadius;
 	List<Particle> particles;
 
