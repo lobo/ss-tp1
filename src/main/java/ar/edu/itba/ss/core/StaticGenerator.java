@@ -27,7 +27,7 @@ public class StaticGenerator implements ParticleGenerator{
 	private double maxRadius;
 	List<Particle> particles;
 
-	private StaticGenerator(final String staticFilename, final String dynamicFilename) throws IOException {
+	public StaticGenerator(final String staticFilename, final String dynamicFilename) throws IOException {
 		final Pattern pattern = Pattern.compile("\\s+");
 		
 		// --- Static file --- 

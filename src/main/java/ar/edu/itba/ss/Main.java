@@ -3,6 +3,7 @@ package ar.edu.itba.ss;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.io.IOException;
 import java.io.PrintStream;
 import java.util.List;
 import java.util.Map;
@@ -14,6 +15,7 @@ import ar.edu.itba.ss.core.NearNeighbourList;
 import ar.edu.itba.ss.core.OptimalGrid;
 import ar.edu.itba.ss.core.Particle;
 import ar.edu.itba.ss.core.SquareSpace;
+import ar.edu.itba.ss.core.StaticGenerator;
 import ar.edu.itba.ss.core.UniformGenerator;
 
 	/**
@@ -25,13 +27,13 @@ public final class Main {
 	private static final String HELP_TEXT = "Cell Index Method Implementation.\n" +
 	
 										"Arguments: \n" + 
-										"* cell <N> <R> <L> <RC> <true | false> <M> <filename>\n" +
-										"* cellfile <staticFile> <dynamicFile> <L> <RC> <true | false> <M> <filename>\n" +
+										"* cell <N> <R> <L> <RC> <true | false> <M> <filename> \n" +
+										"* cellfile <staticFile> <dynamicFile> <L> <RC> <true | false> <M> <filename> \n" +
 										"* brute <N> <R> <L> <RC> <true | false> <filename> \n" +
-										"* brutefile <staticFile> <dynamicFile> <L> <RC> <true | false> <M> <filename>\n";
+										"* brutefile <staticFile> <dynamicFile> <L> <RC> <true | false> <M> <filename> \n";
 	
 	enum EXIT_CODE {
-		NO_ARGS(-1), // LISTO
+		NO_ARGS(-1), 
 		BAD_N_ARGUMENTS(-2),
 		BAD_ARGUMENT(-3);
 		
@@ -50,27 +52,33 @@ public final class Main {
 		System.exit(exitCode.getCode());
 	}
 
-	public static void main(final String [] arguments) throws FileNotFoundException {		
-		if (arguments.length == 0) {
+	public static void main(final String [] args) throws NumberFormatException, IOException {		
+		if (args.length == 0) {
 			System.out.println("[FAIL] - No arguments passed. Try 'help' for more information.");
 			exit(EXIT_CODE.NO_ARGS);
 		}
 		
 		final long start = System.nanoTime();
 		
-		switch (arguments[0]) {
+		switch (args[0]) {
 			case "help":
 				System.out.println(HELP_TEXT);
 				break;
 			case "cell":
-				cellIndexMethod(arguments, start, Integer.valueOf(arguments[6]), arguments[7]);
+				// cell <N> <R> <L> <RC> <true | false> <M> <filename>
+				cellIndexMethod(args, start);
 				break;
 			case "brute":
-				bruteForceMethod(arguments, start, arguments[6]);
+				// brute <N> <R> <L> <RC> <true | false> <filename>
+				bruteForceMethod(args, start);
 				break;
 			case "cellfile":
+				// cellfile <staticFile> <dynamicFile> <L> <RC> <true | false> <M> <filename>
+				cellIndexMethodFile(args, start);
 				break;
 			case "brutefile":
+				// brutefile <staticFile> <dynamicFile> <L> <RC> <true | false> <M> <filename>
+				bruteForceMethodFile(args, start);
 				break;
 			default:
 				System.out.println("[FAIL] - Invalid argument. Try 'help' for more information.");
@@ -81,7 +89,7 @@ public final class Main {
 		System.out.println("\n[DONE]");			
 	}
 	
-	private static void logging(final Map<Particle, List<Particle>> nnl, final long start) {
+	private static void consoleLogging(final Map<Particle, List<Particle>> nnl, final long start) {
 		System.out.println(
 				"Execution Time: " + 1E-9*(System.nanoTime() - start) + " sec.\n");
 		
@@ -95,10 +103,9 @@ public final class Main {
 					particle.getRadius() + "\t- Neighbours IDs: [" +
 					list(neighbours) + "]");
 		});
-	}
+	}	
 	
-	private static void fileLogs(final Map<Particle, List<Particle>> nnl, final long start, final String output_filename) throws FileNotFoundException {
-		
+	private static void fileLogging(final Map<Particle, List<Particle>> nnl, final long start, final String output_filename) throws FileNotFoundException {
 		System.out.println(
 				"Execution Time: " + 1E-9*(System.nanoTime() - start) + " sec.\n");
 
@@ -117,14 +124,59 @@ public final class Main {
 	}
 	
 	
-	// Order of received parameters: <N> <R> <L> <RC> <true|false> <M> <filename>
-	private static void cellIndexMethod(String[] args, final long start, final Integer m, final String output_filename) throws FileNotFoundException {
+	// cellfile <staticFile> <dynamicFile> <L> <RC> <true | false> <M> <filename>
+	private static void cellIndexMethodFile(String[] args, final long start) throws NumberFormatException, IOException {
 		if (args.length != 8 ) {
 			System.out.println("[FAIL] - Bad number of arguments. Try 'help' for more information.");
 			exit(EXIT_CODE.BAD_N_ARGUMENTS);
 		}
 		
-		if (m.equals(0)) {
+		if (Integer.valueOf(args[6]).equals(0)) {
+			System.out.println("Running Cell Index method...");
+			final Map<Particle, List<Particle>> nnl = NearNeighbourList
+					.from(new StaticGenerator(args[1], args[2]))
+					.with(CellIndexMethod
+							.by(OptimalGrid.AUTOMATIC)
+							.build())
+					.over(SquareSpace.of(Double.valueOf(args[3])) // L
+							.periodicBoundary(Boolean.valueOf(args[5])) // include border or not
+							.build())
+					.interactionRadius(Double.valueOf(args[4])) // RC
+					.cluster();
+			
+			smartLogging(nnl, start, args[7]);
+			
+		} else {
+			System.out.println("Running Cell Index method...");
+			final Map<Particle, List<Particle>> nnl = NearNeighbourList
+					.from(UniformGenerator.of(Integer.valueOf(args[1])) // N (only used when not having a dynamic)
+							.invariant(true) // true will always return the same particle set
+							//.spy(p -> System.out.println(p)) // for debugging purposes
+							.maxRadius(Double.valueOf(args[2])) // RADIO PARTICULA
+							.over(Double.valueOf(args[3])) // L
+							.build())
+					.with(CellIndexMethod
+							.by(Integer.valueOf(args[7])) 
+							.build())
+					.over(SquareSpace.of(Double.valueOf(args[3])) // L
+							.periodicBoundary(Boolean.valueOf(args[5])) // include border or not
+							.build())
+					.interactionRadius(Double.valueOf(args[4])) // RC
+					.cluster();
+			
+			smartLogging(nnl, start, args[7]);
+		}
+	}
+	
+	
+	// cell <N> <R> <L> <RC> <true | false> <M> <filename>
+	private static void cellIndexMethod(String[] args, final long start) throws FileNotFoundException {
+		if (args.length != 8 ) {
+			System.out.println("[FAIL] - Bad number of arguments. Try 'help' for more information.");
+			exit(EXIT_CODE.BAD_N_ARGUMENTS);
+		}
+		
+		if (Integer.valueOf(args[6]).equals(0)) {
 			System.out.println("Running Cell Index method...");
 			final Map<Particle, List<Particle>> nnl = NearNeighbourList
 					.from(UniformGenerator.of(Integer.valueOf(args[1])) // N (only used when not having a dynamic)
@@ -142,13 +194,7 @@ public final class Main {
 					.interactionRadius(Double.valueOf(args[4])) // RC
 					.cluster();
 			
-			if (output_filename.equals("null")) {
-				logging(nnl, start);
-				
-			} else {
-				fileLogs(nnl, start, output_filename);
-			}
-			
+			smartLogging(nnl, start, args[7]);			
 		} else {
 			System.out.println("Running Cell Index method...");
 			final Map<Particle, List<Particle>> nnl = NearNeighbourList
@@ -159,7 +205,7 @@ public final class Main {
 							.over(Double.valueOf(args[3])) // L
 							.build())
 					.with(CellIndexMethod
-							.by(m) 
+							.by(Integer.valueOf(args[6])) 
 							.build())
 					.over(SquareSpace.of(Double.valueOf(args[3])) // L
 							.periodicBoundary(Boolean.valueOf(args[5])) // include border or not
@@ -167,18 +213,12 @@ public final class Main {
 					.interactionRadius(Double.valueOf(args[4])) // RC
 					.cluster();
 			
-			if (output_filename.equals("null")) {
-				logging(nnl, start);
-				
-			} else {
-				fileLogs(nnl, start, output_filename);
-			}
-		}
-		
+			smartLogging(nnl, start, args[7]);
+		}	
 	}
 	
 	// Order of received parameters: <N> <R> <L> <RC> <true|false> <filename>
-	private static void bruteForceMethod(String[] args, final long start, final String output_filename) throws FileNotFoundException {
+	private static void bruteForceMethod(String[] args, final long start) throws FileNotFoundException {
 		if (args.length != 7) {
 			System.out.println("[FAIL] - Bad number of arguments. Try 'help' for more information.");
 			exit(EXIT_CODE.BAD_N_ARGUMENTS);
@@ -199,13 +239,41 @@ public final class Main {
 				.interactionRadius(Double.valueOf(args[4])) // RC
 				.cluster();
 		
-		if (output_filename.equals("null")) {
-			logging(nnl, start);
+		smartLogging(nnl, start, args[6]);			
+	}
+	
+	// brutefile <staticFile> <dynamicFile> <L> <RC> <true | false> <M> <filename>
+	private static void bruteForceMethodFile(String[] args, final long start) throws FileNotFoundException {
+		if (args.length != 8) {
+			System.out.println("[FAIL] - Bad number of arguments. Try 'help' for more information.");
+			exit(EXIT_CODE.BAD_N_ARGUMENTS);
+		}
+		
+		System.out.println("Running Brute Force method...");
+		final Map<Particle, List<Particle>> nnl = NearNeighbourList
+				.from(UniformGenerator.of(Integer.valueOf(args[1])) // N (only used when not having a dynamic)
+						.invariant(true) // true will always return the same particle set
+						//.spy(p -> System.out.println(p)) // for debugging purposes
+						.maxRadius(Double.valueOf(args[2])) // RADIO PARTICULA
+						.over(Double.valueOf(args[3])) // L
+						.build())
+				.with(new BruteForce())
+				.over(SquareSpace.of(Double.valueOf(args[3])) // L
+						.periodicBoundary(Boolean.valueOf(args[5])) // include border or not
+						.build())
+				.interactionRadius(Double.valueOf(args[4])) // RC
+				.cluster();
+		
+		smartLogging(nnl, start, args[6]);
+	}
+	
+	private static void smartLogging(Map<Particle, List<Particle>> nnl, final long start, String filename) throws FileNotFoundException {
+		if (filename.equals("null")) {
+			consoleLogging(nnl, start);
 			
 		} else {
-			fileLogs(nnl, start, output_filename);
+			fileLogging(nnl, start, filename);
 		}
-			
 	}
 	
 	private static String list(final List<Particle> neighbours) {
