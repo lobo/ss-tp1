@@ -90,16 +90,16 @@ public final class Main {
 		printExecutionTime(start);		
 	}
 	
-	// cellfile <staticFile> <dynamicFile> <L> <RC> <true | false> <M> <filename>
+	// cellfile <staticFile> <dynamicFile> <RC> <true | false> <M> <filename>
 	// READY
 	private static void cellIndexMethodFile(String[] args, final long start) throws NumberFormatException, IOException {
-		if (args.length != 8 ) {
+		if (args.length != 7 ) {
 			System.out.println("[FAIL] - Bad number of arguments. Try 'help' for more information.");
 			exit(EXIT_CODE.BAD_N_ARGUMENTS);
 		}
 		
 		// if M is not given by the user
-		if (Integer.valueOf(args[6]).equals(0)) {
+		if (Integer.valueOf(args[5]).equals(0)) {
 			System.out.println("Running Cell Index method...");
 			final Map<Particle, List<Particle>> nnl = NearNeighbourList
 					.from(new StaticGenerator(args[1], args[2]))
@@ -107,12 +107,12 @@ public final class Main {
 							.by(OptimalGrid.AUTOMATIC)
 							.build())
 					.over(SquareSpace.of(Double.valueOf(args[3])) // !!! - THIS L COMES FROM THE FILE - THIS IS WRONG
-							.periodicBoundary(Boolean.valueOf(args[5])) // include border or not
+							.periodicBoundary(Boolean.valueOf(args[4])) // include border or not
 							.build())
-					.interactionRadius(Double.valueOf(args[4])) // RC
+					.interactionRadius(Double.valueOf(args[3])) // RC
 					.cluster();
 			
-			smartLogging(nnl, start, args[7]);
+			smartLogging(nnl, start, args[6]);
 			
 		} else {
 			System.out.println("Running Cell Index method...");
