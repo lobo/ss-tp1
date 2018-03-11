@@ -18,6 +18,7 @@ target/
 .DS_Store
 .classpath
 .project
+*.txt
 
 # -----------------------------------------------------------------------------
 # Project Specific:
