@@ -24,7 +24,7 @@ public class UniformGenerator implements ParticleGenerator {
 	protected final double maxRadius;
 	protected final Consumer<Particle> consumer;
 
-	private UniformGenerator(final Builder builder) {
+	protected UniformGenerator(final Builder builder) {
 		this.size = builder.size;
 		this.maxLength = builder.maxLength;
 		this.maxRadius = builder.maxRadius;
