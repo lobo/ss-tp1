@@ -43,7 +43,7 @@ $ java -jar nameOfTheJarFile cellfile <staticFile> <dynamicFile> <RC> <true | fa
 #### Using this without input files
 
 ```
-$ java -jar nameOfTheJarFile cell <N> <R> <L> <RC> <true | false> <M> <filename>
+$ java -jar target/tp1-1.0-SNAPSHOT.jar cell <N> <R> <L> <RC> <true | false> <M> <filename>
 ```
 
 ### Brute Force
@@ -51,14 +51,14 @@ $ java -jar nameOfTheJarFile cell <N> <R> <L> <RC> <true | false> <M> <filename>
 #### Using this with input files
 
 ```
-$ java -jar nameOfTheJarFile brutefile <staticFile> <dynamicFile> <RC> <true | false> <filename>
+$ java -jar target/tp1-1.0-SNAPSHOT.jar brutefile <staticFile> <dynamicFile> <RC> <true | false> <filename>
 ```
 
 
 #### Using this without input files
 
 ```
-$ java -jar nameOfTheJarFile brute <N> <R> <L> <RC> <true | false> <filename>
+$ java -jar target/tp1-1.0-SNAPSHOT.jar brute <N> <R> <L> <RC> <true | false> <filename>
 ```
 
 Where:
