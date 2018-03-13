@@ -16,7 +16,7 @@ import ar.edu.itba.ss.core.NearNeighbourList;
 import ar.edu.itba.ss.core.OptimalGrid;
 import ar.edu.itba.ss.core.Particle;
 import ar.edu.itba.ss.core.SquareSpace;
-import ar.edu.itba.ss.core.StaticGenerator;
+import ar.edu.itba.ss.core.StaticDynamicGenerator;
 import ar.edu.itba.ss.core.UniformGenerator;
 
 	/**
@@ -102,7 +102,7 @@ public final class Main {
 		if (Integer.valueOf(args[5]).equals(0)) {
 			System.out.println("Running Cell Index method...");
 			final Map<Particle, List<Particle>> nnl = NearNeighbourList
-					.from(new StaticGenerator(args[1], args[2]))
+					.from(new StaticDynamicGenerator(args[1], args[2]))
 					.with(CellIndexMethod
 							.by(OptimalGrid.AUTOMATIC)
 							.build())
@@ -116,12 +116,13 @@ public final class Main {
 			
 		} else {
 			System.out.println("Running Cell Index method...");
+			StaticDynamicGenerator generator = new StaticDynamicGenerator(args[1], args[2]);
 			final Map<Particle, List<Particle>> nnl = NearNeighbourList
-					.from(new StaticGenerator(args[1], args[2]))
+					.from(generator)
 					.with(CellIndexMethod
 							.by(Integer.valueOf(args[7])) // M
 							.build())
-					.over(SquareSpace.of(Double.valueOf(args[3])) // !!! - THIS L COMES FROM THE FILE - THIS IS WRONG
+					.over(SquareSpace.of(generator.getL()) 
 							.periodicBoundary(Boolean.valueOf(args[5])) // include border or not
 							.build())
 					.interactionRadius(Double.valueOf(args[4])) // RC
@@ -217,10 +218,11 @@ public final class Main {
 		}
 		
 		System.out.println("Running Brute Force method...");
+		StaticDynamicGenerator generator = new StaticDynamicGenerator(args[1], args[2]);
 		final Map<Particle, List<Particle>> nnl = NearNeighbourList
-				.from(new StaticGenerator(args[1], args[2]))
+				.from(generator)
 				.with(new BruteForce())
-				.over(SquareSpace.of(Double.valueOf(args[3])) // !!! - THIS L COMES FROM THE FILE - THIS IS WRONG
+				.over(SquareSpace.of(generator.getL()) 
 						.periodicBoundary(Boolean.valueOf(args[5])) // include border or not
 						.build())
 				.interactionRadius(Double.valueOf(args[4])) // RC
