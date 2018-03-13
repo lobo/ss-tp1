@@ -58,10 +58,7 @@ public class StaticDynamicGenerator implements ParticleGenerator{
 				}
 				
 				dynamicRead.close();
-				staticRead.close();
-				
-				System.out.println(particles);
-				
+				staticRead.close();				
 			} catch (Exception e) {
 				System.out.println("Error scanning file");
 			}

@@ -100,7 +100,6 @@ public final class Main {
 		
 		// if M is not given by the user
 		if ((int)Integer.valueOf(args[5]) == 0) {
-			System.out.println("asdasdas");
 			System.out.println("Running Cell Index method...");
 			StaticDynamicGenerator generator = new StaticDynamicGenerator(args[1], args[2]);
 			final Map<Particle, List<Particle>> nnl = NearNeighbourList
