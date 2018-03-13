@@ -37,7 +37,7 @@ This will generate a jar in the `target` folder.
 #### Using this with input files
 
 ```
-$ java -jar nameOfTheJarFile cellfile <staticFile> <dynamicFile> <RC> <true | false> <M> <filename>
+$ java -jar target/tp1-1.0-SNAPSHOT.jar cellfile <staticFile> <dynamicFile> <RC> <true | false> <M> <filename>
 ```
 
 #### Using this without input files
