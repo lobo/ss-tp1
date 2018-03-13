@@ -36,21 +36,24 @@ public class StaticDynamicGenerator implements ParticleGenerator{
 			File dynamicFIle = new File(dynamicFilePath);
 			File staticFile = new File(staticFilePath);
 			
-			try {
+			try { 
 				double radius;
 				Scanner dynamicRead = new Scanner(dynamicFIle);
 				Scanner staticRead = new Scanner(staticFile);
 				
 				N = Integer.parseInt(staticRead.next());
 				L = Integer.parseInt(staticRead.next());
+				
+				dynamicRead.next(); // avoid t0 in Dynamic File
 			
 				while(dynamicRead.hasNext() && staticRead.hasNext()){
 					particles.add(new Particle(
-							radius = Double.parseDouble(staticRead.next()),
 							Double.parseDouble(dynamicRead.next()),
-							Double.parseDouble(dynamicRead.next()))
-							);
+							Double.parseDouble(dynamicRead.next()),
+							radius = Double.parseDouble(staticRead.next())
+							));
 					
+					staticRead.next(); // avoid the second column in static file
 					if(radius>maxRadius) maxRadius = radius;
 				}
 				
@@ -75,8 +78,7 @@ public class StaticDynamicGenerator implements ParticleGenerator{
 	
 	@Override
 	public Stream<Particle> generate() {
-		// TODO Auto-generated method stub
-		return null;
+		return particles.stream();
 	}
 
 	@Override

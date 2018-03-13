@@ -99,14 +99,16 @@ public final class Main {
 		}
 		
 		// if M is not given by the user
-		if (Integer.valueOf(args[5]).equals(0)) {
+		if ((int)Integer.valueOf(args[5]) == 0) {
+			System.out.println("asdasdas");
 			System.out.println("Running Cell Index method...");
+			StaticDynamicGenerator generator = new StaticDynamicGenerator(args[1], args[2]);
 			final Map<Particle, List<Particle>> nnl = NearNeighbourList
-					.from(new StaticDynamicGenerator(args[1], args[2]))
+					.from(generator)
 					.with(CellIndexMethod
 							.by(OptimalGrid.AUTOMATIC)
 							.build())
-					.over(SquareSpace.of(Double.valueOf(args[3])) // !!! - THIS L COMES FROM THE FILE - THIS IS WRONG
+					.over(SquareSpace.of(generator.getL()) 
 							.periodicBoundary(Boolean.valueOf(args[4])) // include border or not
 							.build())
 					.interactionRadius(Double.valueOf(args[3])) // RC
