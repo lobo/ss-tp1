@@ -75,7 +75,7 @@ The output file can be found on the root of the project with a `.txt` extension.
 ## Help
 
 ```
-$ java -jar nameOfTheJarFile help
+$ java -jar target/tp1-1.0-SNAPSHOT.jar help
 ```
 
 ## Input files format
