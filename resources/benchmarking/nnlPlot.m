@@ -14,7 +14,6 @@
 		fclose(file);
 
 		% Estructurar información:
-		space = 20.0;
 		space = header(1, 1);
 		Rc = header(1, 2);
 		id = content{:, 1};
