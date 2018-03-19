@@ -113,7 +113,7 @@ public final class Main {
 					.interactionRadius(Double.valueOf(args[3])) // RC
 					.cluster();
 			
-			smartLogging(nnl, start, args[6]);
+			smartLogging(nnl, start, args[6], args[3], "");
 			
 		} else {
 			System.out.println("Running Cell Index method...");
@@ -129,7 +129,7 @@ public final class Main {
 					.interactionRadius(Double.valueOf(args[4])) // RC
 					.cluster();
 			
-			smartLogging(nnl, start, args[7]);
+			smartLogging(nnl, start, args[7], args[3], "");
 		}
 	}
 	
@@ -161,7 +161,7 @@ public final class Main {
 					.interactionRadius(Double.valueOf(args[4])) // RC
 					.cluster();
 			
-			smartLogging(nnl, start, args[7]);			
+			smartLogging(nnl, start, args[7], args[3], args[2]);			
 		} else {
 			System.out.println("Running Cell Index method...");
 			final Map<Particle, List<Particle>> nnl = NearNeighbourList
@@ -180,7 +180,7 @@ public final class Main {
 					.interactionRadius(Double.valueOf(args[4])) // RC
 					.cluster();
 			
-			smartLogging(nnl, start, args[7]);
+			smartLogging(nnl, start, args[7], args[3], args[2]);
 		}	
 	}
 	
@@ -207,7 +207,7 @@ public final class Main {
 				.interactionRadius(Double.valueOf(args[4])) // RC
 				.cluster();
 		
-		smartLogging(nnl, start, args[6]);			
+		smartLogging(nnl, start, args[6], args[3], args[2]);			
 	}
 	
 	// brutefile <staticFile> <dynamicFile> <RC> <true | false> <filename>
@@ -229,7 +229,7 @@ public final class Main {
 				.interactionRadius(Double.valueOf(args[4])) // RC
 				.cluster();
 		
-		smartLogging(nnl, start, args[6]);
+		smartLogging(nnl, start, args[6], args[3],"");
 	}
 	
 	private static void consoleLogging(final Map<Particle, List<Particle>> nnl, final long start) {		
@@ -246,7 +246,7 @@ public final class Main {
 	
 	}	
 	
-	private static void fileLogging(final Map<Particle, List<Particle>> nnl, final long start, final String output_filename) throws FileNotFoundException {
+	private static void fileLogging(final Map<Particle, List<Particle>> nnl, final long start, final String output_filename, final String L, final String Rc) throws FileNotFoundException {
 		System.out.println("The output has been written into a file.");
 		final String filename = "./" + output_filename + ".txt";
 		File file = new File(filename);
@@ -254,20 +254,24 @@ public final class Main {
 		PrintStream ps = new PrintStream(fos);
 		System.setOut(ps);
 		
+		System.out.println(L + " " + Rc);
 		nnl.forEach((particle, neighbours) -> {
 			System.out.println( 
 					particle.hashCode() + " " +
+					particle.getX() + " " + 
+					particle.getY() + " " +
+					particle.getRadius() + " " + 
 					list(neighbours)
 					);
 		});
 	}
 	
-	private static void smartLogging(Map<Particle, List<Particle>> nnl, final long start, String filename) throws FileNotFoundException {
+	private static void smartLogging(Map<Particle, List<Particle>> nnl, final long start, String filename, final String L, final String Rc) throws FileNotFoundException {
 		if (filename.equals("null")) {
 			consoleLogging(nnl, start);
 			
 		} else {
-			fileLogging(nnl, start, filename);
+			fileLogging(nnl, start, filename, L, Rc);
 		}
 	}
 	
