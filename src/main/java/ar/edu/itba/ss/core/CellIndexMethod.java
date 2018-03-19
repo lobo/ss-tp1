@@ -51,7 +51,7 @@
 			if (!isValid(generator, C, interactionRadius))
 				throw new IllegalStateException(
 					"Las dimensiones de la grilla no son consistentes con el radio de interacción.");
-			else System.out.println("Usando M = " + M);
+			//else System.out.println("Usando M = " + M);
 
 			final Map<Point, List<Particle>> cells = generator
 					.generate()

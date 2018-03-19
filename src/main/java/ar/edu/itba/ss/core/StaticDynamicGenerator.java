@@ -1,25 +1,11 @@
 package ar.edu.itba.ss.core;
 
-import static java.util.stream.Collectors.toList;
-
-import java.awt.geom.Point2D;
 import java.io.File;
-import java.io.IOException;
-import java.nio.charset.Charset;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
-import java.util.NoSuchElementException;
 import java.util.Scanner;
-import java.util.Set;
-import java.util.function.Consumer;
-import java.util.stream.Collectors;
 import java.util.stream.Stream;
-import java.util.regex.Pattern;
 
-import ar.edu.itba.ss.core.UniformGenerator.Builder;
 import ar.edu.itba.ss.core.interfaces.ParticleGenerator;
 
 public class StaticDynamicGenerator implements ParticleGenerator{
