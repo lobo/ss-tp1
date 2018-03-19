@@ -292,7 +292,7 @@ public final class Main {
 			list += particle.hashCode() + " ";
 		}
 		if (!neighbours.isEmpty()) {
-			return list.substring(0, list.length() - 2);
+			return list.substring(0, list.length() - 1);
 		}
 		else return list;
 	}
