@@ -113,7 +113,7 @@ public final class Main {
 					.interactionRadius(Double.valueOf(args[3])) // RC
 					.cluster();
 			
-			smartLogging(nnl, start, args[6], args[3], 0.0);
+			smartLogging(nnl, start, args[6], args[3], "");
 			
 		} else {
 			System.out.println("Running Cell Index method...");
@@ -129,7 +129,7 @@ public final class Main {
 					.interactionRadius(Double.valueOf(args[4])) // RC
 					.cluster();
 			
-			smartLogging(nnl, start, args[7], args[3], generator.maxRadius());
+			smartLogging(nnl, start, args[7], args[3], "");
 		}
 	}
 	
@@ -145,14 +145,13 @@ public final class Main {
 		// if M is not given by the user
 		if (Integer.valueOf(args[6]).equals(0)) {
 			System.out.println("Running Cell Index method...");
-			UniformGenerator ug = UniformGenerator.of(Integer.valueOf(args[1])) // N 
-					.invariant(true) // true will always return the same particle set
-					//.spy(p -> System.out.println(p)) // for debugging purposes
-					.maxRadius(Double.valueOf(args[2])) // particle radius
-					.over(Double.valueOf(args[3])) // L
-					.build();
 			final Map<Particle, List<Particle>> nnl = NearNeighbourList
-					.from(ug)
+					.from(UniformGenerator.of(Integer.valueOf(args[1])) // N 
+							.invariant(true) // true will always return the same particle set
+							//.spy(p -> System.out.println(p)) // for debugging purposes
+							.maxRadius(Double.valueOf(args[2])) // particle radius
+							.over(Double.valueOf(args[3])) // L
+							.build())
 					.with(CellIndexMethod
 							.by(OptimalGrid.AUTOMATIC)
 							.build())
@@ -162,17 +161,16 @@ public final class Main {
 					.interactionRadius(Double.valueOf(args[4])) // RC
 					.cluster();
 			
-			smartLogging(nnl, start, args[7], args[3], ug.maxRadius());			
+			smartLogging(nnl, start, args[7], args[3], args[2]);			
 		} else {
 			System.out.println("Running Cell Index method...");
-			UniformGenerator ug = UniformGenerator.of(Integer.valueOf(args[1])) // N (only used when not having a dynamic)
-					.invariant(true) // true will always return the same particle set
-					//.spy(p -> System.out.println(p)) // for debugging purposes
-					.maxRadius(Double.valueOf(args[2])) // RADIO PARTICULA
-					.over(Double.valueOf(args[3])) // L
-					.build();
 			final Map<Particle, List<Particle>> nnl = NearNeighbourList
-					.from(ug)
+					.from(UniformGenerator.of(Integer.valueOf(args[1])) // N (only used when not having a dynamic)
+							.invariant(true) // true will always return the same particle set
+							//.spy(p -> System.out.println(p)) // for debugging purposes
+							.maxRadius(Double.valueOf(args[2])) // RADIO PARTICULA
+							.over(Double.valueOf(args[3])) // L
+							.build())
 					.with(CellIndexMethod
 							.by(Integer.valueOf(args[6])) 
 							.build())
@@ -182,7 +180,7 @@ public final class Main {
 					.interactionRadius(Double.valueOf(args[4])) // RC
 					.cluster();
 			
-			smartLogging(nnl, start, args[7], args[3], ug.maxRadius());
+			smartLogging(nnl, start, args[7], args[3], args[4]);
 		}	
 	}
 	
@@ -195,14 +193,13 @@ public final class Main {
 		}
 		
 		System.out.println("Running Brute Force method...");
-		UniformGenerator ug = UniformGenerator.of(Integer.valueOf(args[1])) // N (only used when not having a dynamic)
-				.invariant(true) // true will always return the same particle set
-				//.spy(p -> System.out.println(p)) // for debugging purposes
-				.maxRadius(Double.valueOf(args[2])) // RADIO PARTICULA
-				.over(Double.valueOf(args[3])) // L
-				.build();
 		final Map<Particle, List<Particle>> nnl = NearNeighbourList
-				.from(ug)
+				.from(UniformGenerator.of(Integer.valueOf(args[1])) // N (only used when not having a dynamic)
+						.invariant(true) // true will always return the same particle set
+						//.spy(p -> System.out.println(p)) // for debugging purposes
+						.maxRadius(Double.valueOf(args[2])) // RADIO PARTICULA
+						.over(Double.valueOf(args[3])) // L
+						.build())
 				.with(new BruteForce())
 				.over(SquareSpace.of(Double.valueOf(args[3])) // L
 						.periodicBoundary(Boolean.valueOf(args[5])) // include border or not
@@ -210,7 +207,7 @@ public final class Main {
 				.interactionRadius(Double.valueOf(args[4])) // RC
 				.cluster();
 		
-		smartLogging(nnl, start, args[6], args[3], ug.maxRadius());			
+		smartLogging(nnl, start, args[6], args[3], args[4]);			
 	}
 	
 	// brutefile <staticFile> <dynamicFile> <RC> <true | false> <filename>
@@ -232,7 +229,7 @@ public final class Main {
 				.interactionRadius(Double.valueOf(args[4])) // RC
 				.cluster();
 		
-		smartLogging(nnl, start, args[6], args[3], generator.maxRadius());
+		smartLogging(nnl, start, args[6], args[3],"");
 	}
 	
 	private static void consoleLogging(final Map<Particle, List<Particle>> nnl, final long start) {		
@@ -249,7 +246,7 @@ public final class Main {
 	
 	}	
 	
-	private static void fileLogging(final Map<Particle, List<Particle>> nnl, final long start, final String output_filename, final String L, final Double Rc) throws FileNotFoundException {
+	private static void fileLogging(final Map<Particle, List<Particle>> nnl, final long start, final String output_filename, final String L, final String Rc) throws FileNotFoundException {
 		System.out.println("The output has been written into a file.");
 		final String filename = "./" + output_filename + ".txt";
 		File file = new File(filename);
@@ -269,12 +266,12 @@ public final class Main {
 		});
 	}
 	
-	private static void smartLogging(Map<Particle, List<Particle>> nnl, final long start, String filename, final String L, final Double Rmax) throws FileNotFoundException {
+	private static void smartLogging(Map<Particle, List<Particle>> nnl, final long start, String filename, final String L, final String Rc) throws FileNotFoundException {
 		if (filename.equals("null")) {
 			consoleLogging(nnl, start);
 			
 		} else {
-			fileLogging(nnl, start, filename, L, Rmax);
+			fileLogging(nnl, start, filename, L, Rc);
 		}
 	}
 	
