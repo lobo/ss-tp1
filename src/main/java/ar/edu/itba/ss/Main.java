@@ -129,7 +129,7 @@ public final class Main {
 					.interactionRadius(Double.valueOf(args[4])) // RC
 					.cluster();
 			
-			smartLogging(nnl, start, args[7], args[3], 0.0);
+			smartLogging(nnl, start, args[7], args[3], generator.maxRadius());
 		}
 	}
 	
@@ -232,7 +232,7 @@ public final class Main {
 				.interactionRadius(Double.valueOf(args[4])) // RC
 				.cluster();
 		
-		smartLogging(nnl, start, args[6], args[3], 0.0);
+		smartLogging(nnl, start, args[6], args[3], generator.maxRadius());
 	}
 	
 	private static void consoleLogging(final Map<Particle, List<Particle>> nnl, final long start) {		
