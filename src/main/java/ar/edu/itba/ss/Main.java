@@ -161,7 +161,7 @@ public final class Main {
 					.interactionRadius(Double.valueOf(args[4])) // RC
 					.cluster();
 			
-			smartLogging(nnl, start, args[7], args[3], args[2]);			
+			smartLogging(nnl, start, args[7], args[3], args[4]);			
 		} else {
 			System.out.println("Running Cell Index method...");
 			final Map<Particle, List<Particle>> nnl = NearNeighbourList
@@ -271,6 +271,7 @@ public final class Main {
 			consoleLogging(nnl, start);
 			
 		} else {
+			System.out.println(Rc);
 			fileLogging(nnl, start, filename, L, Rc);
 		}
 	}
